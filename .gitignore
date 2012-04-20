@@ -10,3 +10,14 @@
 *.lai
 *.la
 *.a
+
+# QT stuff
+*.user
+
+# Project stuff
+Makefile
+bin/.moc/
+bin/OptimalLunarLandingAnalysis
+bin/OptimalLunarLandingAnalysis.config
+ui_MainWindow.h
+maps/*
