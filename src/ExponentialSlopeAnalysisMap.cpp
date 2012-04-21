@@ -25,43 +25,24 @@
 * THE SOFTWARE.
 */
 
-#include "SlopeAnalysisMap.h"
 
-#include <QDebug>
+#include "ExponentialSlopeAnalysisMap.h"
+
 #include <QtCore/qmath.h>
 
-SlopeAnalysisMap::SlopeAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent) :
-    AnalysisMap(elevationMap,settings,parent)
+ExponentialSlopeAnalysisMap::ExponentialSlopeAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent) :
+        SlopeAnalysisMap(elevationMap,settings,parent)
 {
     // Init
-    _name = "Slope Analysis";
+    _name = "Exp. Slope Analysis";
     _elevationMap = elevationMap;
 }
 
-double SlopeAnalysisMap::calculateScoreForPoint(int x, int y) {
-    // Get slope in degrees
-    return mapSlopeToScore(calculateSlopeForPoint(x,y));
-};
+double ExponentialSlopeAnalysisMap::mapSlopeToScore(double slope) {
+    // Do an Exponential scoring
+    return qExp(-sqrt(slope));
 
-double SlopeAnalysisMap::calculateSlopeForPoint(int x, int y) {
-    // Calculate the dx & dy for this point
-    // TODO: handle coordinate change??
-    double y2 = _elevationMap->getElevationAtPoint(x,y+1);
-    double y1 = _elevationMap->getElevationAtPoint(x,y-1);
-    double x2 = _elevationMap->getElevationAtPoint(x+1,y);
-    double x1 = _elevationMap->getElevationAtPoint(x,y);
-    
-    double dy = y2 - y1;
-    double dx = x2 - x1;
-
-    // Find the angle of the scalar of the gradient (radians 0 to 1/2PI)
-    double gradient = qAtan( qSqrt(dx*dx + dy*dy) );
-    // Convert angle to degrees
-    double slope = gradient*180.0/M_PI;
-    return slope;
+    // could be exp(-slope^.4?)
 }
 
-double SlopeAnalysisMap::mapSlopeToScore(double slope) {
-    // Linear analysis
-    return (-10/9*slope+100)/100;
-}
+

@@ -35,13 +35,14 @@ class SlopeAnalysisMap : public AnalysisMap
 
 Q_OBJECT
 
-private:
+protected:
     ElevationDataMap *_elevationMap;
 
 public:
     explicit SlopeAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent = 0);
     virtual double calculateScoreForPoint(int x, int y);
     virtual double calculateSlopeForPoint(int x, int y);
+    virtual double mapSlopeToScore(double slope);
 
 signals:
 
