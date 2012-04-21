@@ -4,7 +4,7 @@
 *
 * Contributor(s):
 * Dan Krusi <dan.krusi@nerves.ch> (original author)
-* Stephan Krusi <stephan.krusi@gmail> (original co-author)
+* Stephan Krusi <stephan.krusi@gmail> (co-author)
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
@@ -25,24 +25,34 @@
 * THE SOFTWARE.
 */
 
+#include "SpatialAnalysisMap.h"
 
-#include "ExponentialSlopeAnalysisMap.h"
-
-#include <QtCore/qmath.h>
-
-ExponentialSlopeAnalysisMap::ExponentialSlopeAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent) :
-        SlopeAnalysisMap(elevationMap,settings,parent)
+SpatialAnalysisMap::SpatialAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent) :
+        AnalysisMap(elevationMap,settings,parent)
 {
     // Init
-    _name = "Exp. Slope Analysis";
+    _name = "Spatial Analysis Map";
     _elevationMap = elevationMap;
 }
 
-double ExponentialSlopeAnalysisMap::mapSlopeToScore(double slope) {
-    // Do an Exponential scoring
-    return qExp(-qSqrt(slope));
-
-    // could be exp(-slope^.4?)
+double SpatialAnalysisMap::calculateScoreForPoint(int x, int y) {
+    // Set tolerance of what is an acceptable height difference
+    double tolerance = 10;
+    // Counter for acceptable points
+    int goodPoints = 0;
+    // Loop through surrounding pixels
+    int range = 100;
+    int x0,y0;
+    for (x0 = -range; x0 < range+1; x0++) {
+        for (y0 = -range; y0 < range+1; y0++) {
+            // Find difference in elevation to current point
+            if ( qAbs(_elevationMap->getElevationAtPoint(x0,y0) - _elevationMap->getElevationAtPoint(x,y) ) < tolerance ) {
+                goodPoints+= 1;
+            }
+        }
+    }
+    // The score (between 0..1)
+    return goodPoints/(2*range+1);
 }
 
 
