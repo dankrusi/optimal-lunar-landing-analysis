@@ -59,6 +59,8 @@ private:
     ElevationDataMap *_elevationMap;
     QList<DataMap*> _dataMaps;
     QList<AnalysisMap*> _analysisMaps;
+    int _tilesLoading;
+    int _tilesLoaded;
 
 private:
     QSettings *_settings;
@@ -81,6 +83,9 @@ public slots:
     void registerAnalysisMap(AnalysisMap *map);
     void showLoadProgress(int percent);
     void viewportCursorMoved(int x,int y);
+    void updateLoadingStatus();
+    void tileLoading(MapTile *tile);
+    void tileLoaded(MapTile *tile);
     void newMapFile();
     void openMapFile();
     void openMapFile(QString filePath);

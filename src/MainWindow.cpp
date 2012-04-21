@@ -46,6 +46,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     // Init
+    _tilesLoading = 0;
+    _tilesLoaded = 0;
     _settings = new QSettings("OptimalLunarLandingAnalysis.config",QSettings::NativeFormat,this);
     _settings->setValue("first_run","false");
     _settings->sync();
@@ -98,6 +100,10 @@ void MainWindow::registerDataMap(DataMap *map) {
     map->load();
     _dataMaps.append(map);
 
+    // Connections
+    connect(map,SIGNAL(tileLoading(MapTile*)),this,SLOT(tileLoading(MapTile*)));
+    connect(map,SIGNAL(tileLoaded(MapTile*)),this,SLOT(tileLoaded(MapTile*)));
+
     // Update scene
     _scene->addItem(map->layer());
     ui->viewport->setScene(_scene);
@@ -113,6 +119,10 @@ void MainWindow::registerAnalysisMap(AnalysisMap *map) {
     // Load the map and register it
     map->load();
     _analysisMaps.append(map);
+
+    // Connections
+    connect(map,SIGNAL(tileLoading(MapTile*)),this,SLOT(tileLoading(MapTile*)));
+    connect(map,SIGNAL(tileLoaded(MapTile*)),this,SLOT(tileLoaded(MapTile*)));
 
     // Update scene
     map->layer()->setVisible(false);
@@ -171,7 +181,25 @@ void MainWindow::showLoadProgress(int percent) {
 }
 
 void MainWindow::viewportCursorMoved(int x,int y) {
-    ui->statusBar->showMessage(QString("Data Point %1,%2").arg(x).arg(y));
+    //ui->statusBar->showMessage(QString("Data Point %1,%2").arg(x).arg(y));
+}
+
+void MainWindow::updateLoadingStatus() {
+    int totalTiles = _tilesLoaded+_tilesLoading;
+    ui->statusBar->showMessage(QString("Loading tile %1/%2...").arg(_tilesLoaded).arg(totalTiles));
+}
+
+void MainWindow::tileLoading(MapTile *tile) {
+    _tilesLoading++;
+    updateLoadingStatus();
+}
+
+void MainWindow::tileLoaded(MapTile *tile) {
+    _tilesLoaded++;
+    _tilesLoading--;
+    this->redrawViewport();
+    updateLoadingStatus();
+    QCoreApplication::processEvents();
 }
 
 void MainWindow::newMapFile() {

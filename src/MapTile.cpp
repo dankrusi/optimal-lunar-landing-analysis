@@ -29,6 +29,7 @@
 #include <QDebug>
 
 #include "DataMap.h"
+#include "MapTileLoader.h"
 
 MapTile::MapTile(DataMap *map, int tileX, int tileY, int size, QGraphicsItem *parent) :
     QGraphicsItem(parent)
@@ -43,6 +44,11 @@ MapTile::MapTile(DataMap *map, int tileX, int tileY, int size, QGraphicsItem *pa
     _tileX = tileX;
     _tileY = tileY;
     _map = map;
+    //this->setVisible(false);
+}
+
+MapTile::~MapTile() {
+
 }
 
 
@@ -52,7 +58,7 @@ QPixmap& MapTile::pixmap() {
     //while(_isLoading) {} // Wait if we are already loading...
     if(!_pixmapLoaded) {
 	qDebug() << "Loading" << _map->name() << "tile pixmap" << _tileX << _tileY << "...";
-	_pixmap = QPixmap::fromImage(image(),Qt::NoOpaqueDetection | Qt::PreferDither);
+    _pixmap = QPixmap::fromImage(image());
 	_pixmapLoaded = true;
     }
     return _pixmap;
@@ -99,6 +105,8 @@ void MapTile::loadData() {
     _isLoading = true;
     _isLoaded = false;
 
+    _map->registerTileLoading(this);
+
     qDebug() << "Loading" << _map->name() << "tile image" << _tileX << _tileY << "...";
     _map->loadTileImage(_tileX,_tileY,_image);
     _imageLoaded = true;
@@ -106,6 +114,12 @@ void MapTile::loadData() {
     _isLoaded = true;
     _isLoading = false;
 
+    _map->registerTileLoaded(this);
+
+}
+
+void MapTile::redraw() {
+    this->update(0,0,_size,_size);
 }
 
 /*

@@ -89,3 +89,11 @@ MapTile* DataMap::getTileAtPixel(int x, int y) {
 double DataMap::megaPixles() {
     return ((_tilesX*_tilesY) * (_tileSize*_tileSize)) / 1000000.0;
 }
+
+void DataMap::registerTileLoading(MapTile *tile) {
+    emit tileLoading(tile);
+}
+
+void DataMap::registerTileLoaded(MapTile *tile) {
+    emit tileLoaded(tile);
+}

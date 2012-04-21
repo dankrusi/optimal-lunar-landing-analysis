@@ -27,11 +27,13 @@
 #ifndef MAPTILE_H
 #define MAPTILE_H
 
+#include <QObject>
 #include <QGraphicsItem>
 #include <QPixmap>
 #include <QImage>
 #include <QRunnable>
 #include <QThreadPool>
+#include <QDebug>
 
 #include "SleeperThread.h"
 
@@ -40,6 +42,7 @@ class DataMap;
 
 class MapTile : public QGraphicsItem
 {
+
 
 private:
     DataMap *_map;
@@ -56,44 +59,24 @@ private:
 
 public:
     explicit MapTile(DataMap *map, int tileX, int tileY, int size, QGraphicsItem *parent = 0);
+    ~MapTile();
     QPixmap& pixmap();
     QImage& image();
     void loadData();
-    void redraw() {
-	this->update(0,0,image().width(),image().height());
-    }
+    void redraw();
+    DataMap* map() { return _map; };
 
 protected:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-signals:
 
-public slots:
+
+
 
 };
 
 
 
-
-class MapTileLoader : public QRunnable {
-
-private:
-    QGraphicsPixmapItem *_item;
-    MapTile *_tile;
-
-public:
-    MapTileLoader(MapTile *tile, QGraphicsPixmapItem *item) : QRunnable() {
-	_item = item;
-	_tile = tile;
-    }
-
-    void run(){
-	//SleeperThread::msleep(1000); // Just for testing load delay
-	_tile->loadData();
-	_tile->redraw();
-    }
-
-};
 
 #endif // MAPTILE_H

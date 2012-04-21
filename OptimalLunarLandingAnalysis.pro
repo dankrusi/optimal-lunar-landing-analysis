@@ -25,7 +25,8 @@ HEADERS += src/MainWindow.h \
     src/SlopeAnalysisMap.h \
     src/AnalysisMap.h \
     src/DataMapListWidgetItem.h \
-    src/ImageDataMap.h
+    src/ImageDataMap.h \
+    src/MapTileLoader.h
 FORMS += forms/MainWindow.ui
 DESTDIR = bin
 OBJECTS_DIR = bin/.obj

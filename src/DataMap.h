@@ -36,7 +36,6 @@ class MapTile;
 
 class DataMap : public QObject
 {
-
     Q_OBJECT
 
 protected:
@@ -63,8 +62,14 @@ public:
     int tilesX() { return _tilesX; };
     int tilesY() { return _tilesY; };
     QString name() { return _name; };
+    void registerTileLoading(MapTile *tile);
+    void registerTileLoaded(MapTile *tile);
+
 
 signals:
+    void tileLoading(MapTile *tile);
+    void tileLoaded(MapTile *tile);
+
 
 public slots:
 
