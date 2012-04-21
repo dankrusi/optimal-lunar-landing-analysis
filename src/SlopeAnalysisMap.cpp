@@ -25,7 +25,9 @@
 */
 
 #include "SlopeAnalysisMap.h"
-#include "QtCore/qmath.h"
+
+#include <QDebug>
+#include <QtCore/qmath.h>
 
 SlopeAnalysisMap::SlopeAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent) :
     AnalysisMap(elevationMap,settings,parent)
@@ -36,7 +38,13 @@ SlopeAnalysisMap::SlopeAnalysisMap(ElevationDataMap *elevationMap, QSettings *se
 }
 
 double SlopeAnalysisMap::calculateScoreForPoint(int x, int y) {
-    return _elevationMap->getElevationAtPoint(x,y)/255.0;
+    double gradient = calculateSlopeForPoint(x,y);
+    //return _elevationMap->getElevationAtPoint(x,y)/255.0;
+    // Linear score
+    double score = -10/9*this->calculateSlopeForPoint(x,y) + 100;
+
+    // if(x%100==0) qDebug() << score;
+    return score;
 };
 
 double SlopeAnalysisMap::calculateSlopeForPoint(int x, int y) {
@@ -50,8 +58,8 @@ double SlopeAnalysisMap::calculateSlopeForPoint(int x, int y) {
     double dy = y2 - y1;
     double dx = x2 - x1;
 
-    // Get the scalar of the gradient
+    // Find the angle of the scalar of the gradient (radians -1/2PI to 1/2PI)
     double gradient = qAtan( qSqrt(dx*dx + dy*dy) );
-    // Is this the angle? m = tan0
-    return gradient;
+    double slope = gradient*180.0/M_PI;
+    return slope;
 }
