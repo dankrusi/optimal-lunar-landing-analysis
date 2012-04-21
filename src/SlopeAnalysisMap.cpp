@@ -30,12 +30,12 @@
 #include <QDebug>
 #include <QtCore/qmath.h>
 
-SlopeAnalysisMap::SlopeAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent) :
-    AnalysisMap(elevationMap,settings,parent)
+SlopeAnalysisMap::SlopeAnalysisMap(ElevationAnalysisMap *elevationAnalysisMap, QSettings *settings, QObject *parent) :
+    AnalysisMap(elevationAnalysisMap,settings,parent)
 {
     // Init
     _name = "Slope Analysis";
-    _elevationMap = elevationMap;
+    _elevationAnalysisMap = elevationAnalysisMap;
 }
 
 double SlopeAnalysisMap::calculateScoreForPoint(int x, int y) {
@@ -46,10 +46,10 @@ double SlopeAnalysisMap::calculateScoreForPoint(int x, int y) {
 double SlopeAnalysisMap::calculateSlopeForPoint(int x, int y) {
     // Calculate the dx & dy for this point
     // TODO: handle coordinate change??
-    double y2 = _elevationMap->getElevationAtPoint(x,y+1);
-    double y1 = _elevationMap->getElevationAtPoint(x,y-1);
-    double x2 = _elevationMap->getElevationAtPoint(x+1,y);
-    double x1 = _elevationMap->getElevationAtPoint(x,y);
+    double y2 = _elevationAnalysisMap->getScoreForPoint(x,y+1);
+    double y1 = _elevationAnalysisMap->getScoreForPoint(x,y-1);
+    double x2 = _elevationAnalysisMap->getScoreForPoint(x+1,y);
+    double x1 = _elevationAnalysisMap->getScoreForPoint(x,y);
     
     double dy = y2 - y1;
     double dx = x2 - x1;

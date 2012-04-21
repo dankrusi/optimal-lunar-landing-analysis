@@ -42,7 +42,7 @@
 #include "DataMapListWidgetItem.h"
 
 #define ZOOM_RESET_RATIO 1.0
-#define ZOOM_SLIDER_OFFSET 0.3
+#define ZOOM_SLIDER_OFFSET 0.9
 #define ZOOM_INCREMENT 1
 #define ZOOM_SNAP_TOLERANCE 0.01
 #define DATAMAP_ROLE 1

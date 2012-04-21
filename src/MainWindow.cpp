@@ -270,13 +270,13 @@ void MainWindow::openMapFile(QString filePath) {
     _elevationMap = new ElevationDataMap(filePath,_settings,this);
     registerDataMap(_elevationMap);
 
-    ElevationAnalysisMap *elevAnalysisMap = new ElevationAnalysisMap(_elevationMap,_settings,this);
-    registerAnalysisMap(elevAnalysisMap);
+    ElevationAnalysisMap *elevationAnalysisMap = new ElevationAnalysisMap(_elevationMap,_settings,this);
+    registerAnalysisMap(elevationAnalysisMap);
 
-    SlopeAnalysisMap *slopeMap = new SlopeAnalysisMap(_elevationMap,_settings,this);
+    SlopeAnalysisMap *slopeMap = new SlopeAnalysisMap(elevationAnalysisMap,_settings,this);
     registerAnalysisMap(slopeMap);
 
-    ExponentialSlopeAnalysisMap *expSlopeMap = new ExponentialSlopeAnalysisMap(_elevationMap,_settings,this);
+    ExponentialSlopeAnalysisMap *expSlopeMap = new ExponentialSlopeAnalysisMap(elevationAnalysisMap,_settings,this);
     registerAnalysisMap(expSlopeMap);
 
     CombinedAnalysisMap *combinedMap = new CombinedAnalysisMap(_elevationMap,_settings,this);

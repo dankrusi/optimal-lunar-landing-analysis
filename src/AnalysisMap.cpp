@@ -108,3 +108,8 @@ void AnalysisMap::loadTileImage(int tileX, int tileY, QImage &image) {
     painter.end();
     */
 }
+
+double AnalysisMap::getScoreForPoint(int x, int y) {
+    QRgb p = getDataAtPixel(x,y);
+    return qRed(p)/255.0;
+}
