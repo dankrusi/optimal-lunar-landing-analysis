@@ -4,7 +4,7 @@
 *
 * Contributor(s):
 * Dan Krusi <dan.krusi@nerves.ch> (original author)
-* Stephan Krusi <stephan.krusi@gmail> (original co-author)
+* Stephan Krusi <stephan.krusi@gmail> (co-author)
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
@@ -25,24 +25,21 @@
 * THE SOFTWARE.
 */
 
+#ifndef SPATIALANALYSISMAP_H
+#define SPATIALANALYSISMAP_H
 
-#include "ExponentialSlopeAnalysisMap.h"
+#include "AnalysisMap.h"
+#include "ElevationDataMap.h"
 
-#include <QtCore/qmath.h>
-
-ExponentialSlopeAnalysisMap::ExponentialSlopeAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent) :
-        SlopeAnalysisMap(elevationMap,settings,parent)
+class SpatialAnalysisMap : public AnalysisMap
 {
-    // Init
-    _name = "Exp. Slope Analysis";
-    _elevationMap = elevationMap;
-}
 
-double ExponentialSlopeAnalysisMap::mapSlopeToScore(double slope) {
-    // Do an Exponential scoring
-    return qExp(-qSqrt(slope));
+private:
+    ElevationDataMap *_elevationMap;
 
-    // could be exp(-slope^.4?)
-}
+public:
+    explicit SpatialAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent = 0);
+    virtual double calculateScoreForPoint(int x, int y);
+};
 
-
+#endif // SPATIALANALYSISMAP_H
