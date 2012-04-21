@@ -266,7 +266,9 @@ void MainWindow::openMapFile(QString filePath) {
     _settings->setValue("last_loaded_map",filePath);
 
     // Load maps
-    //TODO
+    _colorReliefMap = new ColorReliefDataMap(filePath,_settings,this);
+    registerDataMap(_colorReliefMap);
+
     _elevationMap = new ElevationDataMap(filePath,_settings,this);
     registerDataMap(_elevationMap);
 
@@ -289,7 +291,7 @@ void MainWindow::openMapFile(QString filePath) {
 
 
 void MainWindow::on_zoomSlider_valueChanged(int value) {
-    double scale = (double)value / (double)ui->zoomSlider->maximum() + ZOOM_SLIDER_OFFSET;
+    double scale = ((double)value / (double)ui->zoomSlider->maximum() + ZOOM_SLIDER_OFFSET);
     if(scale > 1.0-ZOOM_SNAP_TOLERANCE && scale < 1.0+ZOOM_SNAP_TOLERANCE) scale = 1.0;
     QTransform trans;
     trans.scale(scale,scale);

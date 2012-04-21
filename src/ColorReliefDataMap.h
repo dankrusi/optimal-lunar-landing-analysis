@@ -24,35 +24,23 @@
 * THE SOFTWARE.
 */
 
-#ifndef IMAGEDATAMAP_H
-#define IMAGEDATAMAP_H
+#ifndef COLORRELIEFDATAMAP_H
+#define COLORRELIEFDATAMAP_H
 
-#include <QObject>
-#include <QGraphicsItem>
-#include <QSettings>
+#include "ImageDataMap.h"
 
-#include "DataMap.h"
-
-class ImageDataMap : public DataMap
+class ColorReliefDataMap : public ImageDataMap
 {
 
-    Q_OBJECT
-
-protected:
-    QString _imagePath;
-    QString _tilesPath;
-    QString _configPath;
-    QSettings *_mapSettings;
-    QString _tileID;
+Q_OBJECT
 
 public:
-    ImageDataMap(QString configPath, QSettings *settings, QObject *parent = 0);
-    ~ImageDataMap();
-    virtual void load();
-    virtual void loadTileImage(int tileX, int tileY, QImage &image);
-    void generateTileImages();
-    virtual void paintTileImage(QImage &pixmap, QPixmap &tile, int tileX, int tileY, int tileWidth, int tileHeight);
+    explicit ColorReliefDataMap(QString configPath, QSettings *settings, QObject *parent = 0);
+
+signals:
+
+public slots:
 
 };
 
-#endif // IMAGEDATAMAP_H
+#endif // COLORRELIEFDATAMAP_H
