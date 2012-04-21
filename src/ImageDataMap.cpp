@@ -44,6 +44,7 @@ ImageDataMap::ImageDataMap(QString configPath, QSettings *settings, QObject *par
     _mapSettings = new QSettings(configPath,QSettings::NativeFormat,this);
     _imagePath = _mapSettings->value("map_path").toString();
     _tilesPath = _imagePath + QString(".tiles");
+    qDebug() << "Creating map" << _configPath;
 }
 
 ImageDataMap::~ImageDataMap() {

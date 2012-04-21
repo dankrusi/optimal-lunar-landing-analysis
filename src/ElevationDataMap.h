@@ -28,18 +28,30 @@
 #define ELEVATIONDATAMAP_H
 
 #include <QObject>
+#include <QString>
+#include <QList>
 
 #include "ImageDataMap.h"
+
+struct ColorTableRow {
+    QRgb color;
+    int elevation;
+};
 
 class ElevationDataMap : public ImageDataMap
 {
 
     Q_OBJECT
 
+private:
+    QString _colorTablePath;
+    QList<ColorTableRow> *_colorTable;
+
 public:
     ElevationDataMap(QString configPath, QSettings *settings, QObject *parent = 0);
     ~ElevationDataMap();
     double getElevationAtPoint(int x, int y);
+    double getElevationFromColor(QRgb c);
 
 };
 

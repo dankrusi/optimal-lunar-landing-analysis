@@ -38,7 +38,7 @@ class ImageDataMap : public DataMap
 
     Q_OBJECT
 
-private:
+protected:
     QString _imagePath;
     QString _tilesPath;
     QString _configPath;

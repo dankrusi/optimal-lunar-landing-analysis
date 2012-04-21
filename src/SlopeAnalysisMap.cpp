@@ -41,7 +41,7 @@ double SlopeAnalysisMap::calculateScoreForPoint(int x, int y) {
     // Get slop in degrees
     double slope = calculateSlopeForPoint(x,y);
 
-    // Linear score
+    // Linear score 0..1
     double score = (-10/9*slope+100)/100;
     return score;
 };

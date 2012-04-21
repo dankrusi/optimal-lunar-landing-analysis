@@ -34,20 +34,51 @@
 #include <QFile>
 #include <QGraphicsPixmapItem>
 
+#include "DataMap.h"
 #include "MapTile.h"
 
 ElevationDataMap::ElevationDataMap(QString configPath, QSettings *settings, QObject *parent) : ImageDataMap(configPath,settings,parent)
 {
     // Init
     _name = "Elevation Map";
+    _colorTablePath = _mapSettings->value("colortable_path","").toString();
+    _colorTable = new QList<ColorTableRow>();
+
+    // Read the color table
+    qDebug() << "Reading color table" << _colorTablePath;
+    QFile file(_colorTablePath);
+    file.open(QFile::ReadOnly);
+    QTextStream stream(&file);
+    QString line = stream.readLine(); // Skip first line
+    while(!line.isEmpty()) {
+        // Read the line
+        line = stream.readLine().trimmed().replace(" ","");
+        QStringList columns = line.split('\t');
+        if(columns.count() == 5) {
+            int r = columns.at(1).toInt();
+            int g = columns.at(2).toInt();
+            int b = columns.at(3).toInt();
+            int elevation = columns.at(4).toInt();
+            ColorTableRow ctr;
+            ctr.color = qRgb(r,g,b);
+            ctr.elevation = elevation;
+            _colorTable->append(ctr);
+        }
+    }
+    file.close();
 }
 
 ElevationDataMap::~ElevationDataMap() {
-
+    delete _colorTable;
 }
 
 
 double ElevationDataMap::getElevationAtPoint(int x, int y) {
     QRgb p = getDataAtPixel(x,y);
     return qRed(p); //TODO
+}
+
+
+double ElevationDataMap::getElevationFromColor(QRgb c) {
+
 }
