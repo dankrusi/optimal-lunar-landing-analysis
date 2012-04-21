@@ -38,12 +38,11 @@ SlopeAnalysisMap::SlopeAnalysisMap(ElevationDataMap *elevationMap, QSettings *se
 }
 
 double SlopeAnalysisMap::calculateScoreForPoint(int x, int y) {
-    double gradient = calculateSlopeForPoint(x,y);
-    //return _elevationMap->getElevationAtPoint(x,y)/255.0;
-    // Linear score
-    double score = -10/9*this->calculateSlopeForPoint(x,y) + 100;
+    // Get slop in degrees
+    double slope = calculateSlopeForPoint(x,y);
 
-    // if(x%100==0) qDebug() << score;
+    // Linear score
+    double score = (-10/9*slope+100)/100;
     return score;
 };
 
