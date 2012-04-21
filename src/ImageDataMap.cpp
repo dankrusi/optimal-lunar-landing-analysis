@@ -54,11 +54,13 @@ ImageDataMap::~ImageDataMap() {
 
 void ImageDataMap::load() {
 
+    emit mapLoading(0);
+
     // Do we have tiles?
     _tileSize = _mapSettings->value("tile_size","256").toInt();
     if(!QFile::exists(_tilesPath) || _mapSettings->value("tiles_generated","false") != "true") {
-	qDebug() << "Will generate tiles for" << _imagePath;
-	generateTileImages();
+        qDebug() << "Will generate tiles for" << _imagePath;
+        generateTileImages();
     }
 
     // Set tile settings
@@ -67,6 +69,8 @@ void ImageDataMap::load() {
 
     // Create tile objects
     createTiles();
+
+    emit mapLoading(1);
 }
 
 
@@ -81,34 +85,43 @@ void ImageDataMap::generateTileImages() {
     int tilesX = qCeil((double)pixmap.width() / (double)_tileSize);
     int tilesY = qCeil((double)pixmap.height() / (double)_tileSize);
     int tileCount = 0;
+    int tileTotal = tilesX * tilesY;
+    double lastPercent = -1;
 
     QDir dir;
     dir.mkpath(_tilesPath);
 
     // Loop tile grid
     for(int y = 0; y < tilesY; y++) {
-	for(int x = 0; x < tilesX; x++) {
-	    // Init
-	    tileCount++;
-	    QString tilePath = _tilesPath + (QString("/%1_%2.png").arg(x).arg(y));
-	    qDebug() << "Processing tile" << tileCount << "of" << (tilesX*tilesY) << "...";
-	    int xx = x*_tileSize;
-	    int yy = y*_tileSize;
-	    int width = _tileSize;
-	    int height = _tileSize;
-	    if(xx + width > pixmap.width()) width = _tileSize - (xx + width - pixmap.width());
-	    if(yy + height > pixmap.height()) height = _tileSize - (yy + height - pixmap.height());
+        for(int x = 0; x < tilesX; x++) {
+            // Init
+            tileCount++;
+            QString tilePath = _tilesPath + (QString("/%1_%2.png").arg(x).arg(y));
+            qDebug() << "Processing tile" << tileCount << "of" << (tilesX*tilesY) << "...";
+            int xx = x*_tileSize;
+            int yy = y*_tileSize;
+            int width = _tileSize;
+            int height = _tileSize;
+            if(xx + width > pixmap.width()) width = _tileSize - (xx + width - pixmap.width());
+            if(yy + height > pixmap.height()) height = _tileSize - (yy + height - pixmap.height());
+            double percent = (double)tileCount/(double)tileTotal;
 
-	    // Draw tile
-	    QPixmap tile(width,height);
-	    QPainter painter;
-	    painter.begin(&tile);
-	    painter.drawPixmap(0,0,pixmap,xx,yy,width,height);
-	    painter.end();
+            // Draw tile
+            QPixmap tile(width,height);
+            QPainter painter;
+            painter.begin(&tile);
+            painter.drawPixmap(0,0,pixmap,xx,yy,width,height);
+            painter.end();
 
-	    // Save to file
-	    tile.save(tilePath);
-	}
+            // Save to file
+            tile.save(tilePath);
+
+            // Show progress
+            if(percent != lastPercent) {
+                emit mapLoading(percent);
+                lastPercent = percent;
+            }
+        }
     }
 
     // Save to settings

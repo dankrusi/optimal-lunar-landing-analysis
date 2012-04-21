@@ -69,13 +69,11 @@ void AnalysisMap::loadTileImage(int tileX, int tileY, QImage &image) {
 	  if(score > 1) score = 1;
 
       // Alter pixels of image directly   for (int x = 0; x < image.width(); ++x) {
-
-
-	  unsigned char scoreByte = 255 - score*255;
-	  ((unsigned char*)&row[x])[0] = 0;	    // B
-	  ((unsigned char*)&row[x])[1] = 0;	    // G
-	  ((unsigned char*)&row[x])[2] = scoreByte; // R
-	  ((unsigned char*)&row[x])[3] = 255;	    // A
+      unsigned char scoreByte = 255 - score*255;
+      ((unsigned char*)&row[x])[0] = 0;             // B
+      ((unsigned char*)&row[x])[1] = 0;             // G
+      ((unsigned char*)&row[x])[2] = scoreByte;     // R
+      ((unsigned char*)&row[x])[3] = 255;           // A
       }
     }
 

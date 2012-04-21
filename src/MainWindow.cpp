@@ -61,6 +61,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->viewport->viewport()->setMouseTracking(true);
     on_zoomResetButton_clicked(); // reset zoom button
 
+    // Status bar
+    _progressLabel = new QLabel("",this);
+    ui->statusBar->addPermanentWidget(_progressLabel);
+
     // Actions
     // Icons: http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html
     QMenu *menuFile = new QMenu(tr("&File"), this);
@@ -72,6 +76,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMenu *menuView = new QMenu(tr("&View"), this);
     menuBar()->addMenu(menuView);
     registerAction(menuView,tr("&Redraw"),QIcon::fromTheme("view-refresh"),SLOT(redrawViewport()));
+    registerAction(menuView,tr("&Zoom Out"),QIcon::fromTheme("zoom-out"),SLOT(on_zoomOutButton_clicked()));
+    registerAction(menuView,tr("&Zoom In"),QIcon::fromTheme("zoom-in"),SLOT(on_zoomInButton_clicked()));
+    registerAction(menuView,tr("&Zoom 1:1"),QIcon::fromTheme("zoom-original"),SLOT(on_zoomResetButton_clicked()));
 
     // Scene
     _scene = new ResponsiveGraphicsScene(this);
@@ -96,13 +103,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::registerDataMap(DataMap *map) {
 
-    // Load the map and register it
-    map->load();
-    _dataMaps.append(map);
-
     // Connections
     connect(map,SIGNAL(tileLoading(MapTile*)),this,SLOT(tileLoading(MapTile*)));
     connect(map,SIGNAL(tileLoaded(MapTile*)),this,SLOT(tileLoaded(MapTile*)));
+    connect(map,SIGNAL(mapLoading(double)),this,SLOT(mapLoading(double)));
+
+    // Load the map and register it
+    map->load();
+    _dataMaps.append(map);
 
     // Update scene
     _scene->addItem(map->layer());
@@ -116,13 +124,14 @@ void MainWindow::registerDataMap(DataMap *map) {
 
 void MainWindow::registerAnalysisMap(AnalysisMap *map) {
 
-    // Load the map and register it
-    map->load();
-    _analysisMaps.append(map);
-
     // Connections
     connect(map,SIGNAL(tileLoading(MapTile*)),this,SLOT(tileLoading(MapTile*)));
     connect(map,SIGNAL(tileLoaded(MapTile*)),this,SLOT(tileLoaded(MapTile*)));
+    connect(map,SIGNAL(mapLoading(double)),this,SLOT(mapLoading(double)));
+
+    // Load the map and register it
+    map->load();
+    _analysisMaps.append(map);
 
     // Update scene
     map->layer()->setVisible(false);
@@ -186,12 +195,11 @@ void MainWindow::viewportCursorMoved(int x,int y) {
 
 void MainWindow::updateLoadingStatus() {
     int totalTiles = _tilesLoaded+_tilesLoading;
-    ui->statusBar->showMessage(QString("Loading tile %1/%2...").arg(_tilesLoaded).arg(totalTiles));
+    _progressLabel->setText(QString("Loading tile %1/%2").arg(_tilesLoaded).arg(totalTiles));
 }
 
 void MainWindow::tileLoading(MapTile *tile) {
     _tilesLoading++;
-    updateLoadingStatus();
 }
 
 void MainWindow::tileLoaded(MapTile *tile) {
@@ -199,6 +207,12 @@ void MainWindow::tileLoaded(MapTile *tile) {
     _tilesLoading--;
     this->redrawViewport();
     updateLoadingStatus();
+    QCoreApplication::processEvents();
+}
+
+void MainWindow::mapLoading(double progress) {
+    int percent = (int)(progress*100);
+    _progressLabel->setText(QString("Loading map %1%").arg(percent));
     QCoreApplication::processEvents();
 }
 

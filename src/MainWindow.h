@@ -31,6 +31,8 @@
 #include <QSettings>
 #include <QGraphicsScene>
 #include <QListWidgetItem>
+#include <QProgressBar>
+#include <QLabel>
 
 #include "SleeperThread.h"
 #include "PixmapLoader.h"
@@ -55,12 +57,16 @@ class MainWindow : public QMainWindow {
 
 private:
     Ui::MainWindow *ui;
+    QLabel *_progressLabel;
+
+private:
     ResponsiveGraphicsScene *_scene;
     ElevationDataMap *_elevationMap;
     QList<DataMap*> _dataMaps;
     QList<AnalysisMap*> _analysisMaps;
     int _tilesLoading;
     int _tilesLoaded;
+
 
 private:
     QSettings *_settings;
@@ -86,6 +92,7 @@ public slots:
     void updateLoadingStatus();
     void tileLoading(MapTile *tile);
     void tileLoaded(MapTile *tile);
+    void mapLoading(double progress);
     void newMapFile();
     void openMapFile();
     void openMapFile(QString filePath);
