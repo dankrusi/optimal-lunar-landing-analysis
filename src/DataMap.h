@@ -67,6 +67,7 @@ public:
 
 
 signals:
+    void mapLoading(double progress);
     void tileLoading(MapTile *tile);
     void tileLoaded(MapTile *tile);
 
