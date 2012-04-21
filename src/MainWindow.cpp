@@ -41,6 +41,7 @@
 
 #include "SlopeAnalysisMap.h"
 #include "ExponentialSlopeAnalysisMap.h"
+#include "CombinedAnalysisMap.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -266,6 +267,9 @@ void MainWindow::openMapFile(QString filePath) {
 
     ExponentialSlopeAnalysisMap *expSlopeMap = new ExponentialSlopeAnalysisMap(_elevationMap,_settings,this);
     registerAnalysisMap(expSlopeMap);
+
+    CombinedAnalysisMap *combinedMap = new CombinedAnalysisMap(_elevationMap,_settings,this);
+    registerAnalysisMap(combinedMap);
 }
 
 

@@ -58,9 +58,9 @@ MapTile::~MapTile() {
 QPixmap& MapTile::pixmap() {
     //while(_isLoading) {} // Wait if we are already loading...
     if(!_pixmapLoaded) {
-	qDebug() << "Loading" << _map->name() << "tile pixmap" << _tileX << _tileY << "...";
-    _pixmap = QPixmap::fromImage(image());
-	_pixmapLoaded = true;
+        qDebug() << "Loading" << _map->name() << "tile pixmap" << _tileX << _tileY << "...";
+        _pixmap = QPixmap::fromImage(image());
+        _pixmapLoaded = true;
     }
     return _pixmap;
 }
@@ -70,7 +70,7 @@ QPixmap& MapTile::pixmap() {
 QImage& MapTile::image() {
     while(_isLoading) {} // Wait if we are already loading...
     if(!_imageLoaded) {
-	loadData();
+        loadData();
     }
     return _image;
 }

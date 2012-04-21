@@ -44,10 +44,6 @@ public:
     virtual double calculateSlopeForPoint(int x, int y);
     virtual double mapSlopeToScore(double slope);
 
-signals:
-
-public slots:
-
 };
 
 #endif // SLOPEANALYSISMAP_H

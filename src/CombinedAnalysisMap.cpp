@@ -4,6 +4,7 @@
 *
 * Contributor(s):
 * Dan Krusi <dan.krusi@nerves.ch> (original author)
+* Stephan Krusi <stephan.krusi@gmail> (original co-author)
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
@@ -24,60 +25,20 @@
 * THE SOFTWARE.
 */
 
-#ifndef MAPTILE_H
-#define MAPTILE_H
+#include "CombinedAnalysisMap.h"
 
-#include <QObject>
-#include <QGraphicsItem>
-#include <QPixmap>
-#include <QImage>
-#include <QRunnable>
-#include <QThreadPool>
 #include <QDebug>
-
-#include "SleeperThread.h"
-
-class DataMap;
+#include <QtCore/qmath.h>
 
 
-class MapTile : public QGraphicsItem
+CombinedAnalysisMap::CombinedAnalysisMap(DataMap *dataMap, QSettings *settings, QObject *parent) :
+    AnalysisMap(dataMap,settings,parent)
 {
+    // Init
+    _name = "Combined Analysis";
+}
 
-
-private:
-    DataMap *_map;
-    int _size;
-    int _tileX;
-    int _tileY;
-    bool _pixmapLoaded;
-    QPixmap _pixmap;
-    bool _imageLoaded;
-    QImage _image;
-    QGraphicsPixmapItem *_item;
-    bool _isLoaded;
-    bool _isLoading;
-
-public:
-    explicit MapTile(DataMap *map, int tileX, int tileY, int size, QGraphicsItem *parent = 0);
-    ~MapTile();
-    QPixmap& pixmap();
-    QImage& image();
-    void loadData();
-    void redraw();
-    int size() { return _size; };
-    DataMap* map() { return _map; };
-
-protected:
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
-
-
-
-
+double CombinedAnalysisMap::calculateScoreForPoint(int x, int y) {
+    // Get slope in degrees
+    return 0;
 };
-
-
-
-
-#endif // MAPTILE_H

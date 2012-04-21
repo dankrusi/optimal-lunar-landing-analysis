@@ -76,7 +76,7 @@ QRgb DataMap::getDataAtPixel(int x, int y) {
     if(!tile) return 0;
     int xx = x-tile->pos().x();
     int yy = y-tile->pos().y();
-    if(xx < 0 || xx > tile->image().width() || yy < 0 || yy > tile->image().height()) return 0;
+    if(xx < 0 || xx > tile->size() || yy < 0 || yy > tile->size()) return 0;
     return tile->image().pixel(xx,yy);
 }
 
