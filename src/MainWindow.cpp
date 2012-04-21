@@ -42,6 +42,7 @@
 #include "SlopeAnalysisMap.h"
 #include "ExponentialSlopeAnalysisMap.h"
 #include "CombinedAnalysisMap.h"
+#include "ElevationAnalysisMap.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -192,7 +193,14 @@ void MainWindow::showLoadProgress(int percent) {
 }
 
 void MainWindow::viewportCursorMoved(int x,int y) {
-    //ui->statusBar->showMessage(QString("Data Point %1,%2").arg(x).arg(y));
+    int elevation = _elevationMap->getElevationAtPoint(x,y);
+
+    int minElevation = -9150;
+    int maxElevation = 10760;
+
+    double percent = (double)(elevation - minElevation) / (double)(maxElevation - minElevation);
+
+    ui->statusBar->showMessage(QString("Elevation: %1 %2%").arg(elevation).arg(percent));
 }
 
 void MainWindow::updateLoadingStatus() {
@@ -261,6 +269,9 @@ void MainWindow::openMapFile(QString filePath) {
     //TODO
     _elevationMap = new ElevationDataMap(filePath,_settings,this);
     registerDataMap(_elevationMap);
+
+    ElevationAnalysisMap *elevAnalysisMap = new ElevationAnalysisMap(_elevationMap,_settings,this);
+    registerAnalysisMap(elevAnalysisMap);
 
     SlopeAnalysisMap *slopeMap = new SlopeAnalysisMap(_elevationMap,_settings,this);
     registerAnalysisMap(slopeMap);

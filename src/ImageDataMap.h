@@ -50,6 +50,7 @@ public:
     virtual void load();
     virtual void loadTileImage(int tileX, int tileY, QImage &image);
     void generateTileImages();
+    void paintTileImage(QPixmap &pixmap, QPixmap &tile, int tileX, int tileY, int tileWidth, int tileHeight);
 
 };
 

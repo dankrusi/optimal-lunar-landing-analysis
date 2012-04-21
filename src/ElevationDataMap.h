@@ -51,7 +51,7 @@ public:
     ElevationDataMap(QString configPath, QSettings *settings, QObject *parent = 0);
     ~ElevationDataMap();
     double getElevationAtPoint(int x, int y);
-    double getElevationFromColor(QRgb c);
+    int getElevationFromColor(QRgb c);
 
 };
 

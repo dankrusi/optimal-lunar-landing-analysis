@@ -16,7 +16,8 @@ SOURCES += src/main.cpp \
     src/AnalysisMap.cpp \
     src/ImageDataMap.cpp \
     src/ExponentialSlopeAnalysisMap.cpp \
-    src/CombinedAnalysisMap.cpp
+    src/CombinedAnalysisMap.cpp \
+    src/ElevationAnalysisMap.cpp
 HEADERS += src/MainWindow.h \
     src/SleeperThread.h \
     src/PixmapLoader.h \
@@ -30,7 +31,8 @@ HEADERS += src/MainWindow.h \
     src/ImageDataMap.h \
     src/MapTileLoader.h \
     src/ExponentialSlopeAnalysisMap.h \
-    src/CombinedAnalysisMap.h
+    src/CombinedAnalysisMap.h \
+    src/ElevationAnalysisMap.h
 FORMS += forms/MainWindow.ui
 DESTDIR = bin
 OBJECTS_DIR = bin/.obj

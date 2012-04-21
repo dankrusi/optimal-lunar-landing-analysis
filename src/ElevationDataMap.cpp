@@ -45,7 +45,7 @@ ElevationDataMap::ElevationDataMap(QString configPath, QSettings *settings, QObj
     _colorTable = new QList<ColorTableRow>();
 
     // Read the color table
-    qDebug() << "Reading color table" << _colorTablePath;
+    qDebug() << "Reading color table" << _colorTablePath << "...";
     QFile file(_colorTablePath);
     file.open(QFile::ReadOnly);
     QTextStream stream(&file);
@@ -66,6 +66,7 @@ ElevationDataMap::ElevationDataMap(QString configPath, QSettings *settings, QObj
         }
     }
     file.close();
+    qDebug() << "Table size: " << _colorTable->size();
 }
 
 ElevationDataMap::~ElevationDataMap() {
@@ -74,11 +75,31 @@ ElevationDataMap::~ElevationDataMap() {
 
 
 double ElevationDataMap::getElevationAtPoint(int x, int y) {
-    QRgb p = getDataAtPixel(x,y);
-    return qRed(p); //TODO
+    //return qRed(getDataAtPixel(x,y));
+    return getElevationFromColor(getDataAtPixel(x,y));
 }
 
-
-double ElevationDataMap::getElevationFromColor(QRgb c) {
-
+// TODO: approximation, not exact
+int ElevationDataMap::getElevationFromColor(QRgb color) {
+    int R = qRed(color);
+    int G = qGreen(color);
+    int B = qBlue(color);
+    long I;
+    long Imin = -1;
+    long D, Dmin = LONG_MAX;
+    for( I=0 ; I<_colorTable->count() ; I++ )
+    {
+        ColorTableRow key = _colorTable->at(I);
+        int keyR = qRed(key.color);
+        int keyG = qGreen(key.color);
+        int keyB = qBlue(key.color);
+        D = ( R-keyR )*( R-keyR ) + ( G-keyG )*( G-keyG ) + ( B-keyB )*( B-keyB );
+        if( D < Dmin )
+        {
+            Dmin = D;
+            Imin = I;
+        }
+    }
+    if(Imin < 0) return -1;
+    return( _colorTable->at(Imin).elevation );
 }

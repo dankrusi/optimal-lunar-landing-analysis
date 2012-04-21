@@ -71,10 +71,10 @@ void AnalysisMap::loadTileImage(int tileX, int tileY, QImage &image) {
 
             // Alter pixels of image directly
             unsigned char scoreByte = score*255;
-            ((unsigned char*)&row[x])[0] = 0;             // B
-            ((unsigned char*)&row[x])[1] = scoreByte;     // G
-            ((unsigned char*)&row[x])[2] = 255-scoreByte; // R
-            ((unsigned char*)&row[x])[3] = 255;           // A
+            ((unsigned char*)&row[x])[0] = scoreByte;   // B
+            ((unsigned char*)&row[x])[1] = scoreByte;   // G
+            ((unsigned char*)&row[x])[2] = scoreByte;   // R
+            ((unsigned char*)&row[x])[3] = 255;         // A
         }
     }
 

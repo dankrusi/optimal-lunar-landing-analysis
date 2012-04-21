@@ -74,7 +74,12 @@ void ImageDataMap::load() {
     emit mapLoading(1);
 }
 
-
+void ImageDataMap::paintTileImage(QPixmap &pixmap, QPixmap &tile, int tileX, int tileY, int tileWidth, int tileHeight) {
+    QPainter painter;
+    painter.begin(&tile);
+    painter.drawPixmap(0,0,pixmap,tileX,tileY,tileWidth,tileHeight);
+    painter.end();
+}
 
 
 void ImageDataMap::generateTileImages() {
@@ -109,10 +114,7 @@ void ImageDataMap::generateTileImages() {
 
             // Draw tile
             QPixmap tile(width,height);
-            QPainter painter;
-            painter.begin(&tile);
-            painter.drawPixmap(0,0,pixmap,xx,yy,width,height);
-            painter.end();
+            paintTileImage(pixmap,tile,xx,yy,width,height);
 
             // Save to file
             tile.save(tilePath);
