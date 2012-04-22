@@ -4,6 +4,7 @@
 *
 * Contributor(s):
 * Dan Krusi <dan.krusi@nerves.ch> (original author)
+* Stephan Krusi <stephan.krusi@gmail> (co-author)
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
@@ -45,6 +46,9 @@
 #include "CombinedAnalysisMap.h"
 #include "ElevationAnalysisMap.h"
 #include "SpatialAnalysisMap.h"
+#include "SlopeAnalysisMapO2.h"
+
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -296,6 +300,10 @@ void MainWindow::openMapFile(QString filePath) {
 
     SlopeAnalysisMap *slopeMap = new SlopeAnalysisMap(_elevationDataMap,_settings,this);
     registerAnalysisMap(slopeMap);
+
+
+    SlopeAnalysisMapO2 *slopeMapO2 = new SlopeAnalysisMapO2(_elevationDataMap,_settings,this);
+    registerAnalysisMap(slopeMapO2);
 
     //ExponentialSlopeAnalysisMap *expSlopeMap = new ExponentialSlopeAnalysisMap(elevationAnalysisMap,_settings,this);
     //registerAnalysisMap(expSlopeMap);

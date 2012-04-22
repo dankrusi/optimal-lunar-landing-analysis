@@ -4,7 +4,8 @@
 *
 * Contributor(s):
 * Dan Krusi <dan.krusi@nerves.ch> (original author)
-* Stephan Krusi <stephan.krusi@gmail> (original co-author)
+* Stephan Krusi <stephan.krusi@gmail> (co-author)
+* Nikolay Khanenya <Nick3.Khanenya@gmail.com>
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in

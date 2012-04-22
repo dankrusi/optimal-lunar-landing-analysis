@@ -5,6 +5,7 @@
 * Contributor(s):
 * Dan Krusi <dan.krusi@nerves.ch> (original author)
 * Stephan Krusi <stephan.krusi@gmail> (co-author)
+* Nikolay Khanenya <Nick3.Khanenya@gmail.com>
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
@@ -49,7 +50,7 @@ double SlopeAnalysisMap::calculateSlopeForPoint(int x, int y) {
     double height_y2 = _elevationDataMap->getElevationAtPoint(x,y+1);
     double height_y1 = _elevationDataMap->getElevationAtPoint(x,y-1);
     double height_x2 = _elevationDataMap->getElevationAtPoint(x+1,y);
-    double height_x1 = _elevationDataMap->getElevationAtPoint(x,y);
+    double height_x1 = _elevationDataMap->getElevationAtPoint(x-1,y);
     
     double dHy = height_y2 - height_y1;
     double dHx = height_x2 - height_x1;

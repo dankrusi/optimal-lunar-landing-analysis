@@ -5,6 +5,7 @@
 * Contributor(s):
 * Dan Krusi <dan.krusi@nerves.ch> (original author)
 * Stephan Krusi <stephan.krusi@gmail> (co-author)
+* Nikolay Khanenya <Nick3.Khanenya@gmail.com>
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
@@ -31,13 +32,13 @@ SpatialAnalysisMap::SpatialAnalysisMap(ElevationDataMap *elevationDataMap, QSett
         AnalysisMap(elevationDataMap,settings,parent)
 {
     // Init
-    _name = "Spatial Analysis Map";
+    _name = "Spatial Analysis";
     _elevationDataMap = elevationDataMap;
 }
 
 double SpatialAnalysisMap::calculateScoreForPixel(int x, int y) {
-    // Set tolerance of what is an acceptable height difference
-    double heightTolerance = 10;
+    // Set tolerance of what is an acceptable height difference (in meters)
+    double heightTolerance = 300;
     // Counter for acceptable points
     int goodPoints = 0;
     // Loop through surrounding pixels
