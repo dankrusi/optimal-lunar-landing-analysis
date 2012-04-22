@@ -22,3 +22,5 @@ westernmost_longitude_deg=0.0
 projection_radius_meter=1737400
 projection_width_px=5760
 projection_height_px=2880
+ColorReliefDataMap_tiles_generated=true
+ElevationDataMap_tiles_generated=true
