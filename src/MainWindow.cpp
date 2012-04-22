@@ -44,6 +44,7 @@
 #include "ExponentialSlopeAnalysisMap.h"
 #include "CombinedAnalysisMap.h"
 #include "ElevationAnalysisMap.h"
+#include "SpatialAnalysisMap.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -195,14 +196,11 @@ void MainWindow::showLoadProgress(int percent) {
 }
 
 void MainWindow::viewportCursorMoved(int x,int y) {
-    int elevation = _elevationMap->getElevationAtPoint(x,y);
+    int elevation = _elevationDataMap->getElevationAtPoint(x,y);
     ui->statusBar->showMessage(QString("Pixel: %1,%2 / Elevation: %3m").arg(x).arg(y).arg(elevation));
 }
 
 void MainWindow::centerViewport() {
-    //QTransform t;
-    //t.translate(_scene->width()/2,_scene->height()/2);
-    //ui->viewport->setTransform(t,false);
     ui->viewport->horizontalScrollBar()->setValue(ui->viewport->horizontalScrollBar()->maximum()/2);
     ui->viewport->verticalScrollBar()->setValue(ui->viewport->verticalScrollBar()->maximum()/2);
 }
@@ -281,19 +279,22 @@ void MainWindow::openMapFile(QString filePath) {
     _colorReliefMap = new ColorReliefDataMap(filePath,_settings,this);
     registerDataMap(_colorReliefMap,true);
 
-    _elevationMap = new ElevationDataMap(filePath,_settings,this);
-    registerDataMap(_elevationMap,false);
+    _elevationDataMap = new ElevationDataMap(filePath,_settings,this);
+    registerDataMap(_elevationDataMap,false);
 
-    ElevationAnalysisMap *elevationAnalysisMap = new ElevationAnalysisMap(_elevationMap,_settings,this);
+    ElevationAnalysisMap *elevationAnalysisMap = new ElevationAnalysisMap(_elevationDataMap,_settings,this);
     registerAnalysisMap(elevationAnalysisMap);
 
-    SlopeAnalysisMap *slopeMap = new SlopeAnalysisMap(elevationAnalysisMap,_settings,this);
+    SlopeAnalysisMap *slopeMap = new SlopeAnalysisMap(_elevationDataMap,_settings,this);
     registerAnalysisMap(slopeMap);
 
-    ExponentialSlopeAnalysisMap *expSlopeMap = new ExponentialSlopeAnalysisMap(elevationAnalysisMap,_settings,this);
-    registerAnalysisMap(expSlopeMap);
+    //ExponentialSlopeAnalysisMap *expSlopeMap = new ExponentialSlopeAnalysisMap(elevationAnalysisMap,_settings,this);
+    //registerAnalysisMap(expSlopeMap);
 
-    CombinedAnalysisMap *combinedMap = new CombinedAnalysisMap(_elevationMap,_settings,this);
+    SpatialAnalysisMap *spatialAnalysisMap = new SpatialAnalysisMap(_elevationDataMap, _settings,this);
+    registerAnalysisMap(spatialAnalysisMap);
+
+    CombinedAnalysisMap *combinedMap = new CombinedAnalysisMap(_elevationDataMap,_settings,this);
     registerAnalysisMap(combinedMap);
 
     // Update scene bounds

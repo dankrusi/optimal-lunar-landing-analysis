@@ -30,8 +30,8 @@
 
 #include <QtCore/qmath.h>
 
-ExponentialSlopeAnalysisMap::ExponentialSlopeAnalysisMap(ElevationAnalysisMap *elevationAnalysisMap, QSettings *settings, QObject *parent) :
-        SlopeAnalysisMap(elevationAnalysisMap,settings,parent)
+ExponentialSlopeAnalysisMap::ExponentialSlopeAnalysisMap(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent) :
+        SlopeAnalysisMap(elevationDataMap,settings,parent)
 {
     // Init
     _name = "Exp. Slope Analysis";

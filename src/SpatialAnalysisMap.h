@@ -35,7 +35,7 @@ class SpatialAnalysisMap : public AnalysisMap
 {
 
 private:
-    ElevationDataMap *_elevationMap;
+    ElevationDataMap *_elevationDataMap;
 
 public:
     explicit SpatialAnalysisMap(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent = 0);

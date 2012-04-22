@@ -29,7 +29,7 @@
 #define SLOPEANALYSISMAP_H
 
 #include "AnalysisMap.h"
-#include "ElevationAnalysisMap.h"
+#include "ElevationDataMap.h"
 
 class SlopeAnalysisMap : public AnalysisMap
 {
@@ -37,10 +37,10 @@ class SlopeAnalysisMap : public AnalysisMap
 Q_OBJECT
 
 protected:
-    ElevationAnalysisMap *_elevationAnalysisMap;
+    ElevationDataMap *_elevationDataMap;
 
 public:
-    explicit SlopeAnalysisMap(ElevationAnalysisMap *elevationAnalysisMap, QSettings *settings, QObject *parent = 0);
+    explicit SlopeAnalysisMap(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent = 0);
     virtual double calculateScoreForPoint(int x, int y);
     virtual double calculateSlopeForPoint(int x, int y);
     virtual double mapSlopeToScore(double slope);
