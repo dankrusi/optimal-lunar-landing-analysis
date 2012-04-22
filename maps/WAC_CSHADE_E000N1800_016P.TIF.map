@@ -1,0 +1,24 @@
+[General]
+note=This is the default map on github. Don't use this for testing/working...
+map_path=WAC_CSHADE_E000N1800_016P.TIF
+tile_size=128
+tile_path=WAC_CSHADE_E000N1800_016P.TIF.tiles
+colortable_path=WAC_CSHADE_E000N1800_016P.TIF.colortable
+tiles_x=45
+tiles_y=23
+tiles_generated=false
+map_width=5760
+map_height=2880
+projection=equirectangular
+center_latitude_deg=0
+center_longitude_deg=0
+projection_rotation_deg=0
+resolution_pixperdeg=16.0
+scale_kmperpix=1.8952094015093
+maximum_latitude_deg=-60.0
+minimum_latitude_deg=-90.0
+easternmost_longitude_deg=360.0
+westernmost_longitude_deg=0.0
+projection_radius_meter=1737400
+projection_width_px=5760
+projection_height_px=2880
