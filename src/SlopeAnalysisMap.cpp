@@ -44,21 +44,29 @@ double SlopeAnalysisMap::calculateScoreForPixel(int x, int y) {
 };
 
 double SlopeAnalysisMap::calculateSlopeForPoint(int x, int y) {
-    // Calculate the dx & dy for this point
+    // Calculate the height differences dHx & dHy for this point
     // TODO: handle coordinate change??
-    double y2 = _elevationDataMap->getElevationAtPoint(x,y+1);
-    double y1 = _elevationDataMap->getElevationAtPoint(x,y-1);
-    double x2 = _elevationDataMap->getElevationAtPoint(x+1,y);
-    double x1 = _elevationDataMap->getElevationAtPoint(x,y);
+    double height_y2 = _elevationDataMap->getElevationAtPoint(x,y+1);
+    double height_y1 = _elevationDataMap->getElevationAtPoint(x,y-1);
+    double height_x2 = _elevationDataMap->getElevationAtPoint(x+1,y);
+    double height_x1 = _elevationDataMap->getElevationAtPoint(x,y);
     
-    double dy = y2 - y1;
-    double dx = x2 - x1;
+    double dHy = height_y2 - height_y1;
+    double dHx = height_x2 - height_x1;
+
+    // Slopes (note resX is dependent on y value)
+    double gradientY = dHy/(2*_elevationDataMap->getYResolutionAtPixel());
+    double gradientX = dHx/(2*_elevationDataMap->getXResolutionAtPixel(y));
 
     // Find the angle of the scalar of the gradient (radians 0 to 1/2PI)
-    double gradient = qAtan( qSqrt(dx*dx + dy*dy) );
+    double gradient = qAtan( qSqrt(gradientX*gradientX + gradientY*gradientY));
     // Convert angle to degrees
     double slope = gradient*180.0/M_PI;
+
+    if (x%100 == 0) qDebug() << slope;
+
     return slope;
+
 }
 
 double SlopeAnalysisMap::mapSlopeToScore(double slope) {
