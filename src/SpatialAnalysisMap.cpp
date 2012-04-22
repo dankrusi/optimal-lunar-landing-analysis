@@ -27,12 +27,12 @@
 
 #include "SpatialAnalysisMap.h"
 
-SpatialAnalysisMap::SpatialAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent) :
-        AnalysisMap(elevationMap,settings,parent)
+SpatialAnalysisMap::SpatialAnalysisMap(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent) :
+        AnalysisMap(elevationDataMap,settings,parent)
 {
     // Init
     _name = "Spatial Analysis Map";
-    _elevationMap = elevationMap;
+    _elevationDataMap = elevationDataMap;
 }
 
 double SpatialAnalysisMap::calculateScoreForPoint(int x, int y) {
@@ -46,7 +46,7 @@ double SpatialAnalysisMap::calculateScoreForPoint(int x, int y) {
     for (x0 = -range; x0 < range+1; x0++) {
         for (y0 = -range; y0 < range+1; y0++) {
             // Find difference in elevation to current point
-            if ( qAbs(_elevationMap->getElevationAtPoint(x0,y0) - _elevationMap->getElevationAtPoint(x,y) ) < tolerance ) {
+            if ( qAbs(_elevationDataMap->getElevationAtPoint(x-x0,y-y0) - _elevationDataMap->getElevationAtPoint(x,y) ) < tolerance ) {
                 goodPoints+= 1;
             }
         }

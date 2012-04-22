@@ -63,7 +63,7 @@ private:
 private:
     ResponsiveGraphicsScene *_scene;
     ColorReliefDataMap *_colorReliefMap;
-    ElevationDataMap *_elevationMap;
+    ElevationDataMap *_elevationDataMap;
     QList<DataMap*> _dataMaps;
     QList<AnalysisMap*> _analysisMaps;
     int _tilesLoading;
