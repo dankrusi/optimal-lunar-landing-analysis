@@ -2,9 +2,9 @@
 * Optimal Lunar Landing Analysis
 * https://github.com/dankrusi/optimal-lunar-landing-analysis
 *
-* Contributor(s):
-* Dan Krusi <dan.krusi@nerves.ch> (original author)
-* Stephan Krusi <stephan.krusi@gmail> (co-author)
+* Contributor(s)
+* Christine Corbett <christine.corbett@gmail.com> (original author)
+*
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
