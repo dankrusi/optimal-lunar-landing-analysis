@@ -29,17 +29,19 @@
 
 #include "AnalysisMap.h"
 
+#include <QList>
+
 class CombinedAnalysisMap : public AnalysisMap
 {
     Q_OBJECT
 
     protected:
-
+        QList<AnalysisMap*> _maps;
 
     public:
         explicit CombinedAnalysisMap(DataMap *dataMap, QSettings *settings, QObject *parent = 0);
         virtual double calculateScoreForPixel(int x, int y);
-
+        void addMap(AnalysisMap* map) { _maps.append(map); } ;
 
 };
 

@@ -9,13 +9,10 @@ ElevationAnalysisMap::ElevationAnalysisMap(ElevationDataMap *elevationMap, QSett
 }
 
 double ElevationAnalysisMap::calculateScoreForPixel(int x, int y) {
-
+    // Really trivial implementation: the higher the better...
     int elevation = _elevationMap->getElevationAtPoint(x,y);
-
     int minElevation = -9150;
     int maxElevation = 10760;
-
     return (double)(elevation - minElevation) / (double)(maxElevation - minElevation);
-
 };
 

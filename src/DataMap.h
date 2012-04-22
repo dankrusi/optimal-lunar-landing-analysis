@@ -53,7 +53,6 @@ public:
     QGraphicsItem* layer();
     virtual void load() = 0;
     void createTiles();
-    //virtual void loadTilePixmap(int tileX, int tileY, QPixmap &pixmap) = 0;
     virtual void loadTileImage(int tileX, int tileY, QImage &image) = 0;
     QRgb getDataAtPixel(int x, int y);
     MapTile* getTileAtPixel(int x, int y);
