@@ -87,10 +87,11 @@ private:
 public slots:
     void autoStart();
     void redrawViewport();
-    void registerDataMap(DataMap *map);
+    void registerDataMap(DataMap *map, bool visible);
     void registerAnalysisMap(AnalysisMap *map);
     void showLoadProgress(int percent);
     void viewportCursorMoved(int x,int y);
+    void centerViewport();
     void updateLoadingStatus();
     void tileLoading(MapTile *tile);
     void tileLoaded(MapTile *tile);

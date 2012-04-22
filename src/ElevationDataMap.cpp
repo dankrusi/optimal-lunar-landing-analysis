@@ -33,6 +33,7 @@
 #include <QDir>
 #include <QFile>
 #include <QGraphicsPixmapItem>
+#include <QVector>
 
 #include "DataMap.h"
 #include "MapTile.h"
@@ -43,7 +44,7 @@ ElevationDataMap::ElevationDataMap(QString configPath, QSettings *settings, QObj
     _name = "Elevation Map";
     _tileID = "ElevationDataMap";
     _colorTablePath = _mapSettings->value("colortable_path","").toString();
-    _colorTable = new QList<ColorTableRow>();
+    _colorTable = new QVector<ColorTableRow>();
 
     // Read the color table
     qDebug() << "Reading color table" << _colorTablePath << "...";
