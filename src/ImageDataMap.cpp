@@ -27,7 +27,6 @@
 #include "ImageDataMap.h"
 
 #include <QDebug>
-#include <QtCore/qmath.h>
 #include <QPixmap>
 #include <QPainter>
 #include <QDir>
@@ -170,12 +169,4 @@ LatLong ImageDataMap::getLatLongAtPixel(int x, int y) {
     latlong.longitude = x/_resolutionPxPerDeg;
     latlong.latitude = -y/_resolutionPxPerDeg + 90;
     return latlong;
-}
-
-double ImageDataMap::getXResolutionAtPixel(int y) {
-    return ( 2.0*M_PI*_projectionRadiusMeter*qCos( M_PI*(0.5-(y/_projectionHeightPixel)) ) ) / _projectionWidthPixel;
-}
-
-double ImageDataMap::getYResolutionAtPixel() {
-    return (M_PI*_projectionRadiusMeter) / _projectionHeightPixel;
 }

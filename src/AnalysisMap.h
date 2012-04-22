@@ -42,7 +42,11 @@ public:
     virtual void load();
     virtual void loadTileImage(int tileX, int tileY, QImage &image);
     virtual double calculateScoreForPixel(int x, int y) = 0; // Implementing classes should return a value between 0.0 to 1.0 where 1.0 is the highest score possible
-    double getScoreForPixel(int x, int y);
+
+    inline double getScoreForPixel(int x, int y) {
+        QRgb p = getDataAtPixel(x,y);
+        return qRed(p)/255.0;
+    }
 
 signals:
 

@@ -30,6 +30,7 @@
 #include <QObject>
 #include <QGraphicsItem>
 #include <QSettings>
+#include <QtCore/qmath.h>
 
 #include "DataMap.h"
 
@@ -74,8 +75,14 @@ public:
     void generateTileImages();
     virtual void paintTileImage(QImage &pixmap, QPixmap &tile, int tileX, int tileY, int tileWidth, int tileHeight);
     LatLong getLatLongAtPixel(int x, int y);
-    double getXResolutionAtPixel(int y);
-    double getYResolutionAtPixel();
+
+    inline double getXResolutionAtPixel(int y) {
+        return ( 2.0*M_PI*_projectionRadiusMeter*qCos( M_PI*(0.5-(y/_projectionHeightPixel)) ) ) / _projectionWidthPixel;
+    };
+
+    inline double getYResolutionAtPixel() {
+        return (M_PI*_projectionRadiusMeter) / _projectionHeightPixel;
+    };
 
 };
 
