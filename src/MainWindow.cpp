@@ -4,6 +4,7 @@
 *
 * Contributor(s):
 * Dan Krusi <dan.krusi@nerves.ch> (original author)
+* Stephan Krusi <stephan.krusi@gmail> (co-author)
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
@@ -211,6 +212,13 @@ void MainWindow::centerViewport() {
 
 void MainWindow::updateLoadingStatus() {
     int totalTiles = _tilesLoaded+_tilesLoading;
+    if(totalTiles == _tilesLoaded)  {
+        this->setCursor(Qt::ArrowCursor);
+        ui->viewport->setCursor(Qt::ArrowCursor);
+    } else {
+        this->setCursor(Qt::BusyCursor);
+        ui->viewport->setCursor(Qt::BusyCursor);
+    }
     _progressLabel->setText(QString("Loading tile %1/%2").arg(_tilesLoaded).arg(totalTiles));
 }
 
@@ -304,6 +312,9 @@ void MainWindow::openMapFile(QString filePath) {
     registerAnalysisMap(spatialAnalysisMap);
 
     CombinedAnalysisMap *combinedMap = new CombinedAnalysisMap(_elevationDataMap,_settings,this);
+    //combinedMap->addMap(elevationAnalysisMap);
+    combinedMap->addMap(slopeMap);
+    combinedMap->addMap(spatialAnalysisMap);
     registerAnalysisMap(combinedMap);
 
     // Update scene bounds
