@@ -145,7 +145,7 @@ void ImageDataMap::generateTileImages() {
     }
 
     // Save to settings
-    _mapSettings->setValue("tile_path",_tilesPath);
+    //_mapSettings->setValue("tile_path",_tilesPath);
     _mapSettings->setValue("tile_size",_tileSize);
     _mapSettings->setValue("tiles_x",tilesX);
     _mapSettings->setValue("tiles_y",tilesY);
