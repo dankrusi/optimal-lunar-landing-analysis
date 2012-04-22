@@ -37,7 +37,7 @@ SpatialAnalysisMap::SpatialAnalysisMap(ElevationDataMap *elevationDataMap, QSett
 
 double SpatialAnalysisMap::calculateScoreForPoint(int x, int y) {
     // Set tolerance of what is an acceptable height difference
-    double tolerance = 10;
+    double heightTolerance = 5;
     // Counter for acceptable points
     int goodPoints = 0;
     // Loop through surrounding pixels
@@ -46,7 +46,8 @@ double SpatialAnalysisMap::calculateScoreForPoint(int x, int y) {
     for (x0 = -range; x0 < range+1; x0++) {
         for (y0 = -range; y0 < range+1; y0++) {
             // Find difference in elevation to current point
-            if ( qAbs(_elevationDataMap->getElevationAtPoint(x-x0,y-y0) - _elevationDataMap->getElevationAtPoint(x,y) ) < tolerance ) {
+            // If difference < tolerance ==> it's a good point
+            if ( qAbs(_elevationDataMap->getElevationAtPoint(x-x0,y-y0) - _elevationDataMap->getElevationAtPoint(x,y) ) < heightTolerance ) {
                 goodPoints+= 1;
             }
         }
