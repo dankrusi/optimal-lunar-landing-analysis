@@ -43,7 +43,7 @@ ElevationDataMap::ElevationDataMap(QString configPath, QSettings *settings, QObj
     // Init
     _name = "Elevation Map";
     _tileID = "ElevationDataMap";
-    _colorTablePath = _mapSettings->value("colortable_path","").toString();
+    _colorTablePath = _configDir+_mapSettings->value("colortable_path","").toString();
     _colorTable = new QVector<ColorTableRow>();
 
     // Read the color table

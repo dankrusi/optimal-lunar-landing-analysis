@@ -38,6 +38,7 @@
 #include <QAction>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QScrollBar>
 
 #include "SlopeAnalysisMap.h"
 #include "ExponentialSlopeAnalysisMap.h"
@@ -82,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
     registerAction(menuView,tr("&Zoom Out"),QIcon::fromTheme("zoom-out"),SLOT(on_zoomOutButton_clicked()));
     registerAction(menuView,tr("&Zoom In"),QIcon::fromTheme("zoom-in"),SLOT(on_zoomInButton_clicked()));
     registerAction(menuView,tr("&Zoom 1:1"),QIcon::fromTheme("zoom-original"),SLOT(on_zoomResetButton_clicked()));
-    registerAction(menuView,tr("&Center"),QIcon::fromTheme("zoom-original"),SLOT(centerViewport()));
+    registerAction(menuView,tr("&Center"),QIcon::fromTheme("go-home"),SLOT(centerViewport()));
 
     // Scene
     _scene = new ResponsiveGraphicsScene(this);
@@ -195,17 +196,15 @@ void MainWindow::showLoadProgress(int percent) {
 
 void MainWindow::viewportCursorMoved(int x,int y) {
     int elevation = _elevationMap->getElevationAtPoint(x,y);
-
-    int minElevation = -9150;
-    int maxElevation = 10760;
-
-    double percent = (double)(elevation - minElevation) / (double)(maxElevation - minElevation);
-
-    ui->statusBar->showMessage(QString("Elevation: %1 %2%").arg(elevation).arg(percent));
+    ui->statusBar->showMessage(QString("Pixel: %1,%2 / Elevation: %3m").arg(x).arg(y).arg(elevation));
 }
 
 void MainWindow::centerViewport() {
-    ui->viewport->translate(_scene->width()/2,_scene->height()/2);
+    //QTransform t;
+    //t.translate(_scene->width()/2,_scene->height()/2);
+    //ui->viewport->setTransform(t,false);
+    ui->viewport->horizontalScrollBar()->setValue(ui->viewport->horizontalScrollBar()->maximum()/2);
+    ui->viewport->verticalScrollBar()->setValue(ui->viewport->verticalScrollBar()->maximum()/2);
 }
 
 void MainWindow::updateLoadingStatus() {
