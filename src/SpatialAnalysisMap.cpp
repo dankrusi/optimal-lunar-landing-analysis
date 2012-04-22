@@ -37,7 +37,7 @@ SpatialAnalysisMap::SpatialAnalysisMap(ElevationDataMap *elevationDataMap, QSett
 
 double SpatialAnalysisMap::calculateScoreForPixel(int x, int y) {
     // Set tolerance of what is an acceptable height difference
-    double heightTolerance = 5;
+    double heightTolerance = 10;
     // Counter for acceptable points
     int goodPoints = 0;
     // Loop through surrounding pixels
@@ -53,7 +53,7 @@ double SpatialAnalysisMap::calculateScoreForPixel(int x, int y) {
         }
     }
     // The score (between 0..1)
-    return goodPoints/(2*range+1);
+    return goodPoints/qPow((2*range+1),2);
 }
 
 

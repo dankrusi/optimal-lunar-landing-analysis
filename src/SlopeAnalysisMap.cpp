@@ -63,8 +63,6 @@ double SlopeAnalysisMap::calculateSlopeForPoint(int x, int y) {
     // Convert angle to degrees
     double slope = gradient*180.0/M_PI;
 
-    if (x%100 == 0) qDebug() << slope;
-
     return slope;
 
 }
