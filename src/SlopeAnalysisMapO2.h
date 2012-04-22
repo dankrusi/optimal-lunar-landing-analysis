@@ -28,22 +28,16 @@
 #ifndef SlopeAnalysisMapO2_H
 #define SlopeAnalysisMapO2_H
 
-#include "AnalysisMap.h"
-#include "ElevationDataMap.h"
+#include "SlopeAnalysisMap.h"
 
-class SlopeAnalysisMapO2 : public AnalysisMap
+class SlopeAnalysisMapO2 : public SlopeAnalysisMap
 {
 
 Q_OBJECT
 
-protected:
-    ElevationDataMap *_elevationDataMap;
-
 public:
     explicit SlopeAnalysisMapO2(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent = 0);
-    virtual double calculateScoreForPixel(int x, int y);
-    virtual double calculateSlopeForPoint(int x, int y);
-    virtual double mapSlopeToScore(double slope);
+    double calculateSlopeForPoint(int x, int y);
 
 };
 

@@ -31,17 +31,12 @@
 #include <QtCore/qmath.h>
 
 SlopeAnalysisMapO2::SlopeAnalysisMapO2(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent) :
-    AnalysisMap(elevationDataMap,settings,parent)
+    SlopeAnalysisMap(elevationDataMap,settings,parent)
 {
     // Init
-    _name = "Slope Analysis 2nd order";
+    _name = "Slope Analysis O2";
     _elevationDataMap = elevationDataMap;
 }
-
-double SlopeAnalysisMapO2::calculateScoreForPixel(int x, int y) {
-    // Get slope in degrees
-    return mapSlopeToScore(calculateSlopeForPoint(x,y));
-};
 
 double SlopeAnalysisMapO2::calculateSlopeForPoint(int x, int y) {
     // Calculate the height differences dHx & dHy for this point
@@ -70,9 +65,4 @@ double SlopeAnalysisMapO2::calculateSlopeForPoint(int x, int y) {
 
 }
 
-double SlopeAnalysisMapO2::mapSlopeToScore(double slope) {
-    // Linear analysis
-    return qPow((-1.0/90.0*slope+1.0),6.0);
-    //return (-100/90*slope+100)/100;
-    //return qPow((-1/90*slope+1),16);
-}
+

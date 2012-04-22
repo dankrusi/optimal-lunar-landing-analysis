@@ -13,14 +13,14 @@ SOURCES += src/main.cpp \
     src/MapTile.cpp \
     src/ResponsiveGraphicsScene.cpp \
     src/SlopeAnalysisMap.cpp \
+    src/SlopeAnalysisMapO2.cpp \
     src/AnalysisMap.cpp \
     src/ImageDataMap.cpp \
     src/ExponentialSlopeAnalysisMap.cpp \
     src/CombinedAnalysisMap.cpp \
     src/ElevationAnalysisMap.cpp \
     src/SpatialAnalysisMap.cpp \
-    src/ColorReliefDataMap.cpp \
-    src/SlopeAnalysisMapO2.cpp 
+    src/ColorReliefDataMap.cpp
 HEADERS += src/MainWindow.h \
     src/SleeperThread.h \
     src/PixmapLoader.h \
@@ -29,6 +29,7 @@ HEADERS += src/MainWindow.h \
     src/MapTile.h \
     src/ResponsiveGraphicsScene.h \
     src/SlopeAnalysisMap.h \
+    src/SlopeAnalysisMapO2.h \
     src/AnalysisMap.h \
     src/DataMapListWidgetItem.h \
     src/ImageDataMap.h \
@@ -37,8 +38,7 @@ HEADERS += src/MainWindow.h \
     src/CombinedAnalysisMap.h \
     src/ElevationAnalysisMap.h \
     src/SpatialAnalysisMap.h \
-    src/ColorReliefDataMap.h \
-    src/SlopeAnalysisMapO2.h 
+    src/ColorReliefDataMap.h
 FORMS += forms/MainWindow.ui
 DESTDIR = bin
 OBJECTS_DIR = bin/.obj

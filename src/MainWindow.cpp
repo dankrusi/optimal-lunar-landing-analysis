@@ -301,7 +301,6 @@ void MainWindow::openMapFile(QString filePath) {
     SlopeAnalysisMap *slopeMap = new SlopeAnalysisMap(_elevationDataMap,_settings,this);
     registerAnalysisMap(slopeMap);
 
-
     SlopeAnalysisMapO2 *slopeMapO2 = new SlopeAnalysisMapO2(_elevationDataMap,_settings,this);
     registerAnalysisMap(slopeMapO2);
 
