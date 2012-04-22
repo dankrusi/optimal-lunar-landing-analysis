@@ -82,6 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     registerAction(menuView,tr("&Zoom Out"),QIcon::fromTheme("zoom-out"),SLOT(on_zoomOutButton_clicked()));
     registerAction(menuView,tr("&Zoom In"),QIcon::fromTheme("zoom-in"),SLOT(on_zoomInButton_clicked()));
     registerAction(menuView,tr("&Zoom 1:1"),QIcon::fromTheme("zoom-original"),SLOT(on_zoomResetButton_clicked()));
+    registerAction(menuView,tr("&Center"),QIcon::fromTheme("zoom-original"),SLOT(centerViewport()));
 
     // Scene
     _scene = new ResponsiveGraphicsScene(this);
@@ -104,7 +105,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::registerDataMap(DataMap *map) {
+void MainWindow::registerDataMap(DataMap *map, bool visible) {
 
     // Connections
     connect(map,SIGNAL(tileLoading(MapTile*)),this,SLOT(tileLoading(MapTile*)));
@@ -116,12 +117,12 @@ void MainWindow::registerDataMap(DataMap *map) {
     _dataMaps.append(map);
 
     // Update scene
+    map->layer()->setVisible(visible);
     _scene->addItem(map->layer());
-    ui->viewport->setScene(_scene);
 
     // Register in GUI
     DataMapListWidgetItem *item = new DataMapListWidgetItem(map->name(),ui->dataMapsList);
-    item->setCheckState(Qt::Checked);
+    item->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
     item->map = map;
 }
 
@@ -203,6 +204,10 @@ void MainWindow::viewportCursorMoved(int x,int y) {
     ui->statusBar->showMessage(QString("Elevation: %1 %2%").arg(elevation).arg(percent));
 }
 
+void MainWindow::centerViewport() {
+    ui->viewport->translate(_scene->width()/2,_scene->height()/2);
+}
+
 void MainWindow::updateLoadingStatus() {
     int totalTiles = _tilesLoaded+_tilesLoading;
     _progressLabel->setText(QString("Loading tile %1/%2").arg(_tilesLoaded).arg(totalTiles));
@@ -275,10 +280,10 @@ void MainWindow::openMapFile(QString filePath) {
 
     // Load maps
     _colorReliefMap = new ColorReliefDataMap(filePath,_settings,this);
-    registerDataMap(_colorReliefMap);
+    registerDataMap(_colorReliefMap,true);
 
     _elevationMap = new ElevationDataMap(filePath,_settings,this);
-    registerDataMap(_elevationMap);
+    registerDataMap(_elevationMap,false);
 
     ElevationAnalysisMap *elevationAnalysisMap = new ElevationAnalysisMap(_elevationMap,_settings,this);
     registerAnalysisMap(elevationAnalysisMap);
@@ -291,6 +296,10 @@ void MainWindow::openMapFile(QString filePath) {
 
     CombinedAnalysisMap *combinedMap = new CombinedAnalysisMap(_elevationMap,_settings,this);
     registerAnalysisMap(combinedMap);
+
+    // Update scene bounds
+    ui->viewport->setScene(_scene);
+    centerViewport();
 }
 
 

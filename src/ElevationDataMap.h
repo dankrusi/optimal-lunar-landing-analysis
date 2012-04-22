@@ -45,7 +45,7 @@ class ElevationDataMap : public ImageDataMap
 
 private:
     QString _colorTablePath;
-    QList<ColorTableRow> *_colorTable;
+    QVector<ColorTableRow> *_colorTable;
 
 public:
     ElevationDataMap(QString configPath, QSettings *settings, QObject *parent = 0);
