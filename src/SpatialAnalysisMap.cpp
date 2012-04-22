@@ -41,7 +41,7 @@ double SpatialAnalysisMap::calculateScoreForPoint(int x, int y) {
     // Counter for acceptable points
     int goodPoints = 0;
     // Loop through surrounding pixels
-    int range = 100;
+    int range = 10;
     int x0,y0;
     for (x0 = -range; x0 < range+1; x0++) {
         for (y0 = -range; y0 < range+1; y0++) {

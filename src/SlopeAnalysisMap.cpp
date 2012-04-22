@@ -63,5 +63,7 @@ double SlopeAnalysisMap::calculateSlopeForPoint(int x, int y) {
 
 double SlopeAnalysisMap::mapSlopeToScore(double slope) {
     // Linear analysis
-    return (-10/9*slope+100)/100;
+    return qPow((-1.0/90.0*slope+1.0),6.0);
+    //return (-100/90*slope+100)/100;
+    //return qPow((-1/90*slope+1),16);
 }

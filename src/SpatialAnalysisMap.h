@@ -38,7 +38,7 @@ private:
     ElevationDataMap *_elevationMap;
 
 public:
-    explicit SpatialAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent = 0);
+    explicit SpatialAnalysisMap(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent = 0);
     virtual double calculateScoreForPoint(int x, int y);
 };
 
