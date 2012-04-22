@@ -42,7 +42,7 @@ ImageDataMap::ImageDataMap(QString configPath, QSettings *settings, QObject *par
     _name = "Image Map";
     _configPath = configPath;
     _configDir = QFileInfo(configPath).absoluteDir().path()+QDir::separator();
-    _mapSettings = new QSettings(configPath,QSettings::NativeFormat,this);
+    _mapSettings = new QSettings(configPath,QSettings::IniFormat,this);
     _imagePath = _configDir+_mapSettings->value("map_path").toString();
     _tilesPath = _imagePath + QString(".tiles");
     _tileID = "ImageDataMap";

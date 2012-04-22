@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Init
     _tilesLoading = 0;
     _tilesLoaded = 0;
-    _settings = new QSettings("OptimalLunarLandingAnalysis.config",QSettings::NativeFormat,this);
+    _settings = new QSettings("OptimalLunarLandingAnalysis.config",QSettings::IniFormat,this);
     _settings->setValue("first_run","false");
     _settings->sync();
 
@@ -251,7 +251,7 @@ void MainWindow::newMapFile() {
     QString mapPath = imagePath + ".map";
     qDebug() << "Creating new map " << mapPath;
     QFile::remove(mapPath);
-    QSettings settings(mapPath,QSettings::NativeFormat,this);
+    QSettings settings(mapPath,QSettings::IniFormat,this);
     settings.setValue("map_path",imagePath);
     settings.setValue("colortable_path",colorTablePath);
     settings.setValue("tile_size",tileSize);
