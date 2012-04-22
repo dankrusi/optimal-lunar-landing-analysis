@@ -58,7 +58,9 @@ ImageDataMap::ImageDataMap(QString configPath, QSettings *settings, QObject *par
     _minimumLatitudeDeg = _mapSettings->value("minimum_latitude_deg","-90.0").toDouble();
     _easternmostLongitudeDeg = _mapSettings->value("easternmost_longitude_deg","360.0").toDouble();
     _westernmostLongitudeDeg = _mapSettings->value("westernmost_longitude_deg","0.0").toDouble();
-
+    _projectionRadiusMeter = _mapSettings->value("projection_radius_meter","1737400").toDouble();
+    _projectionWidthPixel = _mapSettings->value("projection_width_px","0").toDouble();
+    _projectionHeightPixel = _mapSettings->value("projection_height_px","0").toDouble();
 
     qDebug() << "New map" << _configPath;
 }
@@ -152,6 +154,8 @@ void ImageDataMap::generateTileImages() {
     //_mapSettings->setValue("map_path",_imagePath);
     _mapSettings->setValue("map_width",pixmap.width());
     _mapSettings->setValue("map_height",pixmap.height());
+    _mapSettings->setValue("projection_width_px",pixmap.width());
+    _mapSettings->setValue("projection_height_px",pixmap.height());
     _mapSettings->sync();
 }
 
@@ -168,12 +172,10 @@ LatLong ImageDataMap::getLatLongAtPixel(int x, int y) {
     return latlong;
 }
 
-double ImageDataMap::getXResolutionAtPixel(int x, int y) {
-    LatLong latlong = getLatLongAtPixel(x,y);
-    return 1;
+double ImageDataMap::getXResolutionAtPixel(int y) {
+    return ( 2.0*M_PI*_projectionRadiusMeter*qCos( M_PI*(0.5-(y/_projectionHeightPixel)) ) ) / _projectionWidthPixel;
 }
 
-double ImageDataMap::getYResolutionAtPixel(int x, int y) {
-    LatLong latlong = getLatLongAtPixel(x,y);
-    return 1;
+double ImageDataMap::getYResolutionAtPixel() {
+    return (M_PI*_projectionRadiusMeter) / _projectionHeightPixel;
 }

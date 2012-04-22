@@ -62,6 +62,9 @@ protected:
     double _minimumLatitudeDeg;
     double _easternmostLongitudeDeg;
     double _westernmostLongitudeDeg;
+    double _projectionRadiusMeter;
+    double _projectionWidthPixel;
+    double _projectionHeightPixel;
 
 public:
     ImageDataMap(QString configPath, QSettings *settings, QObject *parent = 0);
@@ -71,8 +74,8 @@ public:
     void generateTileImages();
     virtual void paintTileImage(QImage &pixmap, QPixmap &tile, int tileX, int tileY, int tileWidth, int tileHeight);
     LatLong getLatLongAtPixel(int x, int y);
-    double getXResolutionAtPixel(int x, int y);
-    double getYResolutionAtPixel(int x, int y);
+    double getXResolutionAtPixel(int y);
+    double getYResolutionAtPixel();
 
 };
 
