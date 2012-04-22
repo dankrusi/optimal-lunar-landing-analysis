@@ -44,6 +44,7 @@ ImageDataMap::ImageDataMap(QString configPath, QSettings *settings, QObject *par
     _mapSettings = new QSettings(configPath,QSettings::NativeFormat,this);
     _imagePath = _mapSettings->value("map_path").toString();
     _tilesPath = _imagePath + QString(".tiles");
+    _tileID = "ImageDataMap";
     qDebug() << "Creating map" << _configPath;
 }
 
@@ -58,8 +59,8 @@ void ImageDataMap::load() {
     emit mapLoading(0);
 
     // Do we have tiles?
-    _tileSize = _mapSettings->value("tile_size","256").toInt();
-    if(!QFile::exists(_tilesPath) || _mapSettings->value("tiles_generated","false") != "true") {
+    _tileSize = _mapSettings->value("tile_size","128").toInt();
+    if(!QFile::exists(_tilesPath) || _mapSettings->value(QString("%1_tiles_generated").arg(_tileID),"false") != "true") {
         qDebug() << "Will generate tiles for" << _imagePath;
         generateTileImages();
     }
@@ -74,10 +75,10 @@ void ImageDataMap::load() {
     emit mapLoading(1);
 }
 
-void ImageDataMap::paintTileImage(QPixmap &pixmap, QPixmap &tile, int tileX, int tileY, int tileWidth, int tileHeight) {
+void ImageDataMap::paintTileImage(QImage &pixmap, QPixmap &tile, int tileX, int tileY, int tileWidth, int tileHeight) {
     QPainter painter;
     painter.begin(&tile);
-    painter.drawPixmap(0,0,pixmap,tileX,tileY,tileWidth,tileHeight);
+    painter.drawImage(0,0,pixmap,tileX,tileY,tileWidth,tileHeight);
     painter.end();
 }
 
@@ -85,7 +86,7 @@ void ImageDataMap::paintTileImage(QPixmap &pixmap, QPixmap &tile, int tileX, int
 void ImageDataMap::generateTileImages() {
 
     // Load pixmap
-    QPixmap pixmap(_imagePath);
+    QImage pixmap(_imagePath);
 
     // Init
     int tilesX = qCeil((double)pixmap.width() / (double)_tileSize);
@@ -102,7 +103,7 @@ void ImageDataMap::generateTileImages() {
         for(int x = 0; x < tilesX; x++) {
             // Init
             tileCount++;
-            QString tilePath = _tilesPath + (QString("/%1_%2.png").arg(x).arg(y));
+            QString tilePath = _tilesPath + (QString("/%1_%2_%3.png").arg(_tileID).arg(x).arg(y));
             qDebug() << "Processing tile" << tileCount << "of" << (tilesX*tilesY) << "...";
             int xx = x*_tileSize;
             int yy = y*_tileSize;
@@ -132,7 +133,7 @@ void ImageDataMap::generateTileImages() {
     _mapSettings->setValue("tile_size",_tileSize);
     _mapSettings->setValue("tiles_x",tilesX);
     _mapSettings->setValue("tiles_y",tilesY);
-    _mapSettings->setValue("tiles_generated","true");
+    _mapSettings->setValue(QString("%1_tiles_generated").arg(_tileID),"true");
     _mapSettings->setValue("map_path",_imagePath);
     _mapSettings->setValue("map_width",pixmap.width());
     _mapSettings->setValue("map_height",pixmap.height());
@@ -140,6 +141,6 @@ void ImageDataMap::generateTileImages() {
 }
 
 void ImageDataMap::loadTileImage(int tileX, int tileY, QImage &image) {
-    QString tilePath = _tilesPath + (QString("/%1_%2.png").arg(tileX).arg(tileY));
+    QString tilePath = _tilesPath + (QString("/%1_%2_%3.png").arg(_tileID).arg(tileX).arg(tileY));
     image.load(tilePath);
 }

@@ -50,8 +50,10 @@ private:
 public:
     ElevationDataMap(QString configPath, QSettings *settings, QObject *parent = 0);
     ~ElevationDataMap();
+    virtual void paintTileImage(QImage &pixmap, QPixmap &tile, int tileX, int tileY, int tileWidth, int tileHeight);
     double getElevationAtPoint(int x, int y);
-    int getElevationFromColor(QRgb c);
+    double getElevationPercentFromElevation(double elevation);
+    int getElevationFromColorRelief(QRgb c);
 
 };
 

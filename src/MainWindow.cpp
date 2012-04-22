@@ -227,21 +227,29 @@ void MainWindow::mapLoading(double progress) {
 }
 
 void MainWindow::newMapFile() {
-    // Get file path
-    QString filePath = QFileDialog::getOpenFileName(this,tr("New Map File"), "", tr("Image Files (*.tif *.tiff *.png *.jpg *.bmp)"));
-    if(filePath.isEmpty()) return;
+    // Get the type
+    //TODO
+
+    // Get image path
+    QString imagePath = QFileDialog::getOpenFileName(this,tr("Image File"), "", tr("Image Files (*.tif *.tiff *.png *.jpg *.bmp)"));
+    if(imagePath.isEmpty()) return;
+
+    // Get the color table
+    QString colorTablePath = QFileDialog::getOpenFileName(this,tr("Color Table File"), "", tr("Color Table Files (*.colortable)"));
+    if(colorTablePath.isEmpty()) return;
 
     // Get tile size
     bool ok;
-    int tileSize = QInputDialog::getInt(this, tr("New Map File"),tr("Tile size:"), 256, 64, 1024, 64, &ok);
+    int tileSize = QInputDialog::getInt(this, tr("New Map File"),tr("Tile size:"), 128, 64, 1024, 64, &ok);
     if(!ok) return;
 
     // Create new map file
-    QString mapPath = filePath + ".map";
-    qDebug() << "Creating new map " << filePath;
+    QString mapPath = imagePath + ".map";
+    qDebug() << "Creating new map " << mapPath;
     QFile::remove(mapPath);
     QSettings settings(mapPath,QSettings::NativeFormat,this);
-    settings.setValue("map_path",filePath);
+    settings.setValue("map_path",imagePath);
+    settings.setValue("colortable_path",colorTablePath);
     settings.setValue("tile_size",tileSize);
     settings.sync();
 
@@ -266,7 +274,9 @@ void MainWindow::openMapFile(QString filePath) {
     _settings->setValue("last_loaded_map",filePath);
 
     // Load maps
-    //TODO
+    _colorReliefMap = new ColorReliefDataMap(filePath,_settings,this);
+    registerDataMap(_colorReliefMap);
+
     _elevationMap = new ElevationDataMap(filePath,_settings,this);
     registerDataMap(_elevationMap);
 
@@ -289,7 +299,7 @@ void MainWindow::openMapFile(QString filePath) {
 
 
 void MainWindow::on_zoomSlider_valueChanged(int value) {
-    double scale = (double)value / (double)ui->zoomSlider->maximum() + ZOOM_SLIDER_OFFSET;
+    double scale = ((double)value / (double)ui->zoomSlider->maximum() + ZOOM_SLIDER_OFFSET);
     if(scale > 1.0-ZOOM_SNAP_TOLERANCE && scale < 1.0+ZOOM_SNAP_TOLERANCE) scale = 1.0;
     QTransform trans;
     trans.scale(scale,scale);
