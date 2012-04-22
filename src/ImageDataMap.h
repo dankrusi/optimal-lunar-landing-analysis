@@ -42,6 +42,7 @@ protected:
     QString _imagePath;
     QString _tilesPath;
     QString _configPath;
+    QString _configDir;
     QSettings *_mapSettings;
     QString _tileID;
 

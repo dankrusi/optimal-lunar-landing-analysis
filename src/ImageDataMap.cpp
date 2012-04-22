@@ -32,6 +32,7 @@
 #include <QPainter>
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QGraphicsPixmapItem>
 
 #include "MapTile.h"
@@ -41,8 +42,9 @@ ImageDataMap::ImageDataMap(QString configPath, QSettings *settings, QObject *par
     // Init
     _name = "Image Map";
     _configPath = configPath;
+    _configDir = QFileInfo(configPath).absoluteDir().path()+QDir::separator();
     _mapSettings = new QSettings(configPath,QSettings::NativeFormat,this);
-    _imagePath = _mapSettings->value("map_path").toString();
+    _imagePath = _configDir+_mapSettings->value("map_path").toString();
     _tilesPath = _imagePath + QString(".tiles");
     _tileID = "ImageDataMap";
     qDebug() << "Creating map" << _configPath;
@@ -103,7 +105,7 @@ void ImageDataMap::generateTileImages() {
         for(int x = 0; x < tilesX; x++) {
             // Init
             tileCount++;
-            QString tilePath = _tilesPath + (QString("/%1_%2_%3.png").arg(_tileID).arg(x).arg(y));
+            QString tilePath = _tilesPath + QDir::separator() + (QString("%1_%2_%3.png").arg(_tileID).arg(x).arg(y));
             qDebug() << "Processing tile" << tileCount << "of" << (tilesX*tilesY) << "...";
             int xx = x*_tileSize;
             int yy = y*_tileSize;
