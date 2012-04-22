@@ -41,8 +41,8 @@ public:
     explicit AnalysisMap(DataMap *dataMap, QSettings *settings, QObject *parent = 0);
     virtual void load();
     virtual void loadTileImage(int tileX, int tileY, QImage &image);
-    virtual double calculateScoreForPoint(int x, int y) = 0; // Implementing classes should return a value between 0.0 to 1.0 where 1.0 is the highest score possible
-    double getScoreForPoint(int x, int y);
+    virtual double calculateScoreForPixel(int x, int y) = 0; // Implementing classes should return a value between 0.0 to 1.0 where 1.0 is the highest score possible
+    double getScoreForPixel(int x, int y);
 
 signals:
 

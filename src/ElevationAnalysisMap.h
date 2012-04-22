@@ -14,7 +14,7 @@ protected:
 
 public:
     explicit ElevationAnalysisMap(ElevationDataMap *elevationMap, QSettings *settings, QObject *parent = 0);
-    virtual double calculateScoreForPoint(int x, int y);
+    virtual double calculateScoreForPixel(int x, int y);
 
 signals:
 

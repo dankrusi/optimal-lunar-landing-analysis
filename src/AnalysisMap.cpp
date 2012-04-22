@@ -65,7 +65,7 @@ void AnalysisMap::loadTileImage(int tileX, int tileY, QImage &image) {
             // Grab score
             int xx = tileX*_dataMap->tileSize() + x;
             int yy = tileY*_dataMap->tileSize() + y;
-            double score = calculateScoreForPoint(xx,yy);
+            double score = calculateScoreForPixel(xx,yy);
             if(score < 0) score = 0;
             if(score > 1) score = 1;
 
@@ -109,7 +109,7 @@ void AnalysisMap::loadTileImage(int tileX, int tileY, QImage &image) {
     */
 }
 
-double AnalysisMap::getScoreForPoint(int x, int y) {
+double AnalysisMap::getScoreForPixel(int x, int y) {
     QRgb p = getDataAtPixel(x,y);
     return qRed(p)/255.0;
 }

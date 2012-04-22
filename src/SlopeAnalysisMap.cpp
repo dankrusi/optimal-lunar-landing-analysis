@@ -38,7 +38,7 @@ SlopeAnalysisMap::SlopeAnalysisMap(ElevationDataMap *elevationDataMap, QSettings
     _elevationDataMap = elevationDataMap;
 }
 
-double SlopeAnalysisMap::calculateScoreForPoint(int x, int y) {
+double SlopeAnalysisMap::calculateScoreForPixel(int x, int y) {
     // Get slope in degrees
     return mapSlopeToScore(calculateSlopeForPoint(x,y));
 };

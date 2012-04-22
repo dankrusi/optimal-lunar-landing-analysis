@@ -33,18 +33,35 @@
 
 #include "DataMap.h"
 
+struct LatLong {
+    double latitude;
+    double longitude;
+};
+
 class ImageDataMap : public DataMap
 {
 
     Q_OBJECT
 
 protected:
+    // Map variables
     QString _imagePath;
     QString _tilesPath;
     QString _configPath;
     QString _configDir;
     QSettings *_mapSettings;
     QString _tileID;
+
+    // Map meta
+    QString _projection;
+    double _centerLatitudeDeg;
+    double _centerLongitudeDeg;
+    double _resolutionPxPerDeg;
+    double _scaleKmPerPx;
+    double _maximumLatitudeDeg;
+    double _minimumLatitudeDeg;
+    double _easternmostLongitudeDeg;
+    double _westernmostLongitudeDeg;
 
 public:
     ImageDataMap(QString configPath, QSettings *settings, QObject *parent = 0);
@@ -53,6 +70,9 @@ public:
     virtual void loadTileImage(int tileX, int tileY, QImage &image);
     void generateTileImages();
     virtual void paintTileImage(QImage &pixmap, QPixmap &tile, int tileX, int tileY, int tileWidth, int tileHeight);
+    LatLong getLatLongAtPixel(int x, int y);
+    double getXResolutionAtPixel(int x, int y);
+    double getYResolutionAtPixel(int x, int y);
 
 };
 

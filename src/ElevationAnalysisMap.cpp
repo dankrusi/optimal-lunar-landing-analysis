@@ -8,7 +8,7 @@ ElevationAnalysisMap::ElevationAnalysisMap(ElevationDataMap *elevationMap, QSett
     _elevationMap = elevationMap;
 }
 
-double ElevationAnalysisMap::calculateScoreForPoint(int x, int y) {
+double ElevationAnalysisMap::calculateScoreForPixel(int x, int y) {
 
     int elevation = _elevationMap->getElevationAtPoint(x,y);
 

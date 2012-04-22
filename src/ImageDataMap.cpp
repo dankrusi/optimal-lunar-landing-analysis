@@ -47,7 +47,20 @@ ImageDataMap::ImageDataMap(QString configPath, QSettings *settings, QObject *par
     _imagePath = _configDir+_mapSettings->value("map_path").toString();
     _tilesPath = _imagePath + QString(".tiles");
     _tileID = "ImageDataMap";
-    qDebug() << "Creating map" << _configPath;
+
+    // Map meta
+    _projection = _mapSettings->value("projection","equirectangular").toString();
+    _centerLatitudeDeg = _mapSettings->value("center_latitude_deg","0").toDouble();
+    _centerLongitudeDeg = _mapSettings->value("center_longitude_deg","0").toDouble();
+    _resolutionPxPerDeg = _mapSettings->value("resolution_pixperdeg","16.0").toDouble();
+    _scaleKmPerPx = _mapSettings->value("scale_kmperpix","1.8952094015093").toDouble();
+    _maximumLatitudeDeg = _mapSettings->value("maximum_latitude_deg","-60.0").toDouble();
+    _minimumLatitudeDeg = _mapSettings->value("minimum_latitude_deg","-90.0").toDouble();
+    _easternmostLongitudeDeg = _mapSettings->value("easternmost_longitude_deg","360.0").toDouble();
+    _westernmostLongitudeDeg = _mapSettings->value("westernmost_longitude_deg","0.0").toDouble();
+
+
+    qDebug() << "New map" << _configPath;
 }
 
 ImageDataMap::~ImageDataMap() {
@@ -136,7 +149,7 @@ void ImageDataMap::generateTileImages() {
     _mapSettings->setValue("tiles_x",tilesX);
     _mapSettings->setValue("tiles_y",tilesY);
     _mapSettings->setValue(QString("%1_tiles_generated").arg(_tileID),"true");
-    _mapSettings->setValue("map_path",_imagePath);
+    //_mapSettings->setValue("map_path",_imagePath);
     _mapSettings->setValue("map_width",pixmap.width());
     _mapSettings->setValue("map_height",pixmap.height());
     _mapSettings->sync();
@@ -145,4 +158,22 @@ void ImageDataMap::generateTileImages() {
 void ImageDataMap::loadTileImage(int tileX, int tileY, QImage &image) {
     QString tilePath = _tilesPath + (QString("/%1_%2_%3.png").arg(_tileID).arg(tileX).arg(tileY));
     image.load(tilePath);
+}
+
+LatLong ImageDataMap::getLatLongAtPixel(int x, int y) {
+    //TODO: refine this for all the map meta and projection types
+    LatLong latlong;
+    latlong.longitude = x/_resolutionPxPerDeg;
+    latlong.latitude = -y/_resolutionPxPerDeg + 90;
+    return latlong;
+}
+
+double ImageDataMap::getXResolutionAtPixel(int x, int y) {
+    LatLong latlong = getLatLongAtPixel(x,y);
+    return 1;
+}
+
+double ImageDataMap::getYResolutionAtPixel(int x, int y) {
+    LatLong latlong = getLatLongAtPixel(x,y);
+    return 1;
 }

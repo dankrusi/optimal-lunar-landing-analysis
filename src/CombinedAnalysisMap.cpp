@@ -38,7 +38,7 @@ CombinedAnalysisMap::CombinedAnalysisMap(DataMap *dataMap, QSettings *settings, 
     _name = "Combined Analysis";
 }
 
-double CombinedAnalysisMap::calculateScoreForPoint(int x, int y) {
+double CombinedAnalysisMap::calculateScoreForPixel(int x, int y) {
     // Get slope in degrees
     return 0;
 };

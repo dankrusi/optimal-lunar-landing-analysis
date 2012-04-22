@@ -75,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMenu *menuFile = new QMenu(tr("&File"), this);
     menuBar()->addMenu(menuFile);
     registerAction(menuFile,tr("&Load Map..."),QIcon::fromTheme("document-open"),SLOT(openMapFile()));
-    registerAction(menuFile,tr("&New Map..."),QIcon::fromTheme("document-new"),SLOT(newMapFile()));
+    //registerAction(menuFile,tr("&New Map..."),QIcon::fromTheme("document-new"),SLOT(newMapFile()));
     registerAction(menuFile,tr("&Exit"),QIcon::fromTheme("application-exit"),SLOT(close()));
     ui->mainToolBar->addSeparator();
     QMenu *menuView = new QMenu(tr("&View"), this);
@@ -197,7 +197,8 @@ void MainWindow::showLoadProgress(int percent) {
 
 void MainWindow::viewportCursorMoved(int x,int y) {
     int elevation = _elevationDataMap->getElevationAtPoint(x,y);
-    ui->statusBar->showMessage(QString("Pixel: %1,%2 / Elevation: %3m").arg(x).arg(y).arg(elevation));
+    LatLong latlong = _elevationDataMap->getLatLongAtPixel(x,y);
+    ui->statusBar->showMessage(QString("LatLong: %1,%2 / Pixel: %3,%4 / Elevation: %5m").arg(latlong.latitude).arg(latlong.longitude).arg(x).arg(y).arg(elevation));
 }
 
 void MainWindow::centerViewport() {
@@ -231,6 +232,7 @@ void MainWindow::mapLoading(double progress) {
 void MainWindow::newMapFile() {
     // Get the type
     //TODO
+    qFatal("unsupported");
 
     // Get image path
     QString imagePath = QFileDialog::getOpenFileName(this,tr("Image File"), "", tr("Image Files (*.tif *.tiff *.png *.jpg *.bmp)"));
