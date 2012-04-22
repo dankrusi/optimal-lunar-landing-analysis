@@ -59,7 +59,7 @@ void ImageDataMap::load() {
     emit mapLoading(0);
 
     // Do we have tiles?
-    _tileSize = _mapSettings->value("tile_size","256").toInt();
+    _tileSize = _mapSettings->value("tile_size","128").toInt();
     if(!QFile::exists(_tilesPath) || _mapSettings->value(QString("%1_tiles_generated").arg(_tileID),"false") != "true") {
         qDebug() << "Will generate tiles for" << _imagePath;
         generateTileImages();
