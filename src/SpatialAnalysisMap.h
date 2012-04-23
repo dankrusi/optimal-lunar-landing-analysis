@@ -38,6 +38,7 @@ class SpatialAnalysisMap : public AnalysisMap
 protected:
     ElevationDataMap *_elevationDataMap;
     int _range;
+    double _heightTolerance;
 
 public:
     explicit SpatialAnalysisMap(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent = 0);
@@ -53,7 +54,8 @@ public:
     {
 	// Init
 	_name = "Large Spatial Analysis";
-	_range = 20;
+	_range = 30;
+	_heightTolerance = 300;
     }
 };
 

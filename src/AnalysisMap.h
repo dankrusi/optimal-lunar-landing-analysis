@@ -36,6 +36,7 @@ Q_OBJECT
 
 private:
     DataMap *_dataMap;
+    int _resolution;
 
 public:
     explicit AnalysisMap(DataMap *dataMap, QSettings *settings, QObject *parent = 0);

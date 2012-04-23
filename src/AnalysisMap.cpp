@@ -45,6 +45,7 @@ void AnalysisMap::load() {
     _tileSize = _dataMap->tileSize();
     _tilesX = _dataMap->tilesX();
     _tilesY = _dataMap->tilesY();
+    _resolution = 1; // Must be divisor of tile size
 
     // Create tile objects
     createTiles();
@@ -58,54 +59,31 @@ void AnalysisMap::loadTileImage(int tileX, int tileY, QImage &image) {
     image = QImage(this->tileSize(),this->tileSize(),QImage::Format_ARGB32);
 
     // Scan image lines...
-    for (int y = 0; y < image.height(); ++y) {
+    double score = 0;
+    int tileSize = _dataMap->tileSize();
+    int res = _resolution;
+    for (int y = 0; y < image.height(); y++) {
         QRgb *row = (QRgb*)image.scanLine(y);
-        for (int x = 0; x < image.width(); ++x) {
+	for (int x = 0; x < image.width(); x=x+res) {
 
-            // Grab score
-            int xx = tileX*_dataMap->tileSize() + x;
-            int yy = tileY*_dataMap->tileSize() + y;
-            double score = calculateScoreForPixel(xx,yy);
-            if(score < 0) score = 0;
-            if(score > 1) score = 1;
+	    // Grab score
+	    int xx = tileX*tileSize + x;
+	    int yy = tileY*tileSize + y;
+	    score = calculateScoreForPixel(xx,yy);
+	    if(score < 0) score = 0;
+	    else if(score > 1) score = 1;
 
-            // Alter pixels of image directly
-            unsigned char scoreByte = score*255;
-            ((unsigned char*)&row[x])[0] = 0;   // B
-            ((unsigned char*)&row[x])[1] = 0;   // G
-            ((unsigned char*)&row[x])[2] = scoreByte;   // R
-            ((unsigned char*)&row[x])[3] = 255;         // A
+	    // Loop over resx
+	    for(int resx = 0; resx < res; resx++) {
+		// Alter pixels of image directly
+		unsigned char scoreByte = score*255;
+		((unsigned char*)&row[x+resx])[0] = 0;   // B
+		((unsigned char*)&row[x+resx])[1] = 0;   // G
+		((unsigned char*)&row[x+resx])[2] = scoreByte;   // R
+		((unsigned char*)&row[x+resx])[3] = 255;         // A
+	    }
         }
     }
 
-
-    // Old code:
-
-    /*
-    // Create image
-    image = QImage(this->tileSize(),this->tileSize(),QImage::Format_ARGB32);
-    image.fill(Qt::transparent);
-
-    // Paint it according to score
-    QPainter painter;
-    painter.begin(&image);
-
-    for(int x = 0; x < image.width(); x++) {
-	for(int y = 0; y < image.width(); y++) {
-	    int xx = tileX*_dataMap->tileSize() + x;
-	    int yy = tileY*_dataMap->tileSize() + y;
-	    double score = calculateScoreForPoint(xx,yy);
-	    if(score < 0) score = 0;
-	    if(score > 1) score = 1;
-	    int scoreByte = score * 255;
-	    scoreByte = 0;
-	    painter.setPen(qRgba(200,200,200,50));
-	    //painter.setPen(Qt::red);
-	    painter.drawRect(x,y,1,1);
-	}
-    }
-
-    painter.end();
-    */
 }
 
