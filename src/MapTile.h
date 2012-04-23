@@ -34,6 +34,7 @@
 #include <QRunnable>
 #include <QThreadPool>
 #include <QDebug>
+#include <QMutex>
 
 #include "SleeperThread.h"
 
@@ -56,6 +57,7 @@ private:
     QGraphicsPixmapItem *_item;
     bool _isLoaded;
     bool _isLoading;
+    QMutex _mutex; //TODO: double check the locking works correctly
 
 public:
     explicit MapTile(DataMap *map, int tileX, int tileY, int size, QGraphicsItem *parent = 0);

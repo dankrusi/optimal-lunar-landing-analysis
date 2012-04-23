@@ -68,10 +68,12 @@ QPixmap& MapTile::pixmap() {
 
 
 QImage& MapTile::image() {
-    while(_isLoading) {} // Wait if we are already loading...
+    //while(_isLoading) {} // Wait if we are already loading...
+    _mutex.lock();
     if(!_imageLoaded) {
         loadData();
     }
+    _mutex.unlock();
     return _image;
 }
 
@@ -84,6 +86,7 @@ void MapTile::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     if(_isLoaded == false && _isLoading == false){
 
 	// Init
+	_mutex.lock();
 	_isLoading = true;
 
 	// Load the tile in a seperate thread...
@@ -114,6 +117,7 @@ void MapTile::loadData() {
 
     _isLoaded = true;
     _isLoading = false;
+    _mutex.unlock();
 
     _map->registerTileLoaded(this);
 

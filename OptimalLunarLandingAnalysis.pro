@@ -44,3 +44,4 @@ DESTDIR = bin
 OBJECTS_DIR = bin/.obj
 MOC_DIR = bin/.moc
 RCC_DIR = bin/.rcc
+

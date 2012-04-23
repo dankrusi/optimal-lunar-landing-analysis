@@ -5,6 +5,7 @@
 * Contributor(s):
 * Dan Krusi <dan.krusi@nerves.ch> (original author)
 * Stephan Krusi <stephan.krusi@gmail> (co-author)
+* Nikolay Khanenya <Nick3.Khanenya@gmail.com>
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
@@ -34,12 +35,26 @@
 class SpatialAnalysisMap : public AnalysisMap
 {
 
-private:
+protected:
     ElevationDataMap *_elevationDataMap;
+    int _range;
 
 public:
     explicit SpatialAnalysisMap(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent = 0);
     virtual double calculateScoreForPixel(int x, int y);
+};
+
+class LargeSpatialAnalysisMap : public SpatialAnalysisMap
+{
+
+public:
+    explicit LargeSpatialAnalysisMap(ElevationDataMap *elevationDataMap, QSettings *settings, QObject *parent = 0) :
+	    SpatialAnalysisMap(elevationDataMap,settings,parent)
+    {
+	// Init
+	_name = "Large Spatial Analysis";
+	_range = 20;
+    }
 };
 
 #endif // SPATIALANALYSISMAP_H

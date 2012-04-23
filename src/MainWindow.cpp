@@ -310,6 +310,9 @@ void MainWindow::openMapFile(QString filePath) {
     SpatialAnalysisMap *spatialAnalysisMap = new SpatialAnalysisMap(_elevationDataMap, _settings,this);
     registerAnalysisMap(spatialAnalysisMap);
 
+    LargeSpatialAnalysisMap *largeSpatialAnalysisMap = new LargeSpatialAnalysisMap(_elevationDataMap, _settings,this);
+    registerAnalysisMap(largeSpatialAnalysisMap);
+
     CombinedAnalysisMap *combinedMap = new CombinedAnalysisMap(_elevationDataMap,_settings,this);
     //combinedMap->addMap(elevationAnalysisMap);
     combinedMap->addMap(slopeMap);
