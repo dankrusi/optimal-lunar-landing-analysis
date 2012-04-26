@@ -123,6 +123,17 @@ void MapTile::loadData() {
 
 }
 
+void MapTile::dropData() {
+    _mutex.lock();
+
+    _isLoaded = false;
+    _imageLoaded = false;
+    _pixmapLoaded = false;
+    _item = NULL; //TODO: memory leak?
+
+    _mutex.unlock();
+}
+
 void MapTile::redraw() {
     this->update(0,0,_size,_size);
 }

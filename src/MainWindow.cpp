@@ -40,6 +40,7 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QScrollBar>
+#include <QFontDatabase>
 
 #include "SlopeAnalysisMap.h"
 #include "ExponentialSlopeAnalysisMap.h"
@@ -319,6 +320,11 @@ void MainWindow::openMapFile(QString filePath) {
     combinedMap->addMap(spatialAnalysisMap);
     registerAnalysisMap(combinedMap);
 
+    // Set maximum resolution
+    int maxRes = qLn(_elevationDataMap->tileSize())/qLn(2);
+    ui->resolutionSlider->setMinimum(0);
+    ui->resolutionSlider->setMaximum(maxRes);
+
     // Update scene bounds
     ui->viewport->setScene(_scene);
     centerViewport();
@@ -335,6 +341,24 @@ void MainWindow::on_zoomSlider_valueChanged(int value) {
     QTransform trans;
     trans.scale(scale,scale);
     ui->viewport->setTransform(trans,false);
+
+    ui->zoomLabel->setText(QString("Zoom: %1").arg(QString::number(scale,'f',1)));
+}
+
+void MainWindow::on_resolutionSlider_valueChanged(int value) {
+    // Init
+    int resolution = qPow(2,value);
+
+    // Show in gui
+    ui->resolutionLabel->setText(QString("Resolution: 1:%1").arg(resolution));
+
+    // Tell the maps
+    foreach(AnalysisMap *map,_analysisMaps) {
+	map->setResolution(resolution);
+    }
+
+    // Update
+    this->redrawViewport();
 }
 
 void MainWindow::on_zoomResetButton_clicked() {

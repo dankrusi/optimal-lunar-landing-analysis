@@ -32,6 +32,8 @@
 #include <QCoreApplication>
 #include <QDebug>
 
+#include "MapTile.h"
+
 AnalysisMap::AnalysisMap(DataMap *dataMap, QSettings *settings, QObject *parent) :
     DataMap(settings,parent)
 {
@@ -58,32 +60,73 @@ void AnalysisMap::loadTileImage(int tileX, int tileY, QImage &image) {
     // Create image
     image = QImage(this->tileSize(),this->tileSize(),QImage::Format_ARGB32);
 
-    // Scan image lines...
+    // Init
     double score = 0;
     int tileSize = _dataMap->tileSize();
-    int res = _resolution;
-    for (int y = 0; y < image.height(); y++) {
-        QRgb *row = (QRgb*)image.scanLine(y);
-	for (int x = 0; x < image.width(); x=x+res) {
 
-	    // Grab score
-	    int xx = tileX*tileSize + x;
-	    int yy = tileY*tileSize + y;
-	    score = calculateScoreForPixel(xx,yy);
-	    if(score < 0) score = 0;
-	    else if(score > 1) score = 1;
+    // Switch on resolution, since the systems are quite differerent
+    if(_resolution == 1) {
 
-	    // Loop over resx
-	    for(int resx = 0; resx < res; resx++) {
+	// Scan image lines...
+	for (int y = 0; y < image.height(); y++) {
+	    QRgb *row = (QRgb*)image.scanLine(y);
+	    for (int x = 0; x < image.width(); x++) {
+
+		// Grab score
+		int xx = tileX*tileSize + x;
+		int yy = tileY*tileSize + y;
+		score = calculateScoreForPixel(xx,yy);
+		if(score < 0) score = 0;
+		else if(score > 1) score = 1;
+
 		// Alter pixels of image directly
 		unsigned char scoreByte = score*255;
-		((unsigned char*)&row[x+resx])[0] = 0;   // B
-		((unsigned char*)&row[x+resx])[1] = 0;   // G
-		((unsigned char*)&row[x+resx])[2] = scoreByte;   // R
-		((unsigned char*)&row[x+resx])[3] = 255;         // A
+		((unsigned char*)&row[x])[0] = 0;	    // B
+		((unsigned char*)&row[x])[1] = 0;	    // G
+		((unsigned char*)&row[x])[2] = scoreByte;   // R
+		((unsigned char*)&row[x])[3] = 255;         // A
 	    }
-        }
-    }
+	}
 
+    } else {
+
+	// Loop over blocks of _resolution
+	for (int resTileX = 0; resTileX < image.width()/_resolution; resTileX++) {
+	    for (int resTileY = 0; resTileY < image.height()/_resolution; resTileY++) {
+		int resX = resTileX*_resolution;
+		int resY = resTileY*_resolution;
+		int xx = tileX*tileSize + resX;
+		int yy = tileY*tileSize + resY;
+		score = calculateScoreForPixel(xx,yy);
+		if(score < 0) score = 0;
+		else if(score > 1) score = 1;
+
+		// Scan image lines...
+		for (int y = resY; y < resY+_resolution; y++) {
+		    QRgb *row = (QRgb*)image.scanLine(y);
+		    for (int x = resX; x < resX+_resolution; x++) {
+			// Alter pixels of image directly
+			unsigned char scoreByte = score*255;
+			((unsigned char*)&row[x])[0] = 0;	    // B
+			((unsigned char*)&row[x])[1] = 0;	    // G
+			((unsigned char*)&row[x])[2] = scoreByte;   // R
+			((unsigned char*)&row[x])[3] = 255;         // A
+		    }
+		}
+	    }
+	}
+    }
+}
+
+void AnalysisMap::setResolution(int resolution) {
+    qDebug() << "Changing resolution to" << resolution;
+
+    // Set
+    _resolution = resolution; //TODO: make sure it is valid?
+
+    // Tell all tiles
+    foreach(MapTile *tile,_tiles) {
+	tile->dropData();
+    }
 }
 

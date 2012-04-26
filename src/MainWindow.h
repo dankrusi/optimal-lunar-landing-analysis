@@ -101,6 +101,7 @@ public slots:
     void openMapFile();
     void openMapFile(QString filePath);
     void on_zoomSlider_valueChanged(int value);
+    void on_resolutionSlider_valueChanged(int value);
     void on_zoomResetButton_clicked();
     void on_zoomInButton_clicked();
     void on_zoomOutButton_clicked();

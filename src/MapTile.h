@@ -65,6 +65,7 @@ public:
     QPixmap& pixmap();
     QImage& image();
     void loadData();
+    void dropData();
     void redraw();
     int size() { return _size; };
     DataMap* map() { return _map; };
